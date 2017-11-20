@@ -2,5 +2,5 @@
 Vores tredje semester projekt.
 Tom = true
 Ricco = false
-Jesper = false
+Jesper = true
 Frederik = false
