@@ -1,6 +1,6 @@
 # 3rdSemesterProject
 Vores tredje semester projekt.
 Tom = true
-Ricco = false
-Jesper = true
+Ricco = true
+Jesper = false
 Frederik = false
