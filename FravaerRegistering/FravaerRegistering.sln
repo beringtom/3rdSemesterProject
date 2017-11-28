@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardRelay", "CardRelay\Card
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3rdSemesterRestService", "3rdSemesterRestService\3rdSemesterRestService.csproj", "{4E888E0F-F626-4DBF-AA5F-7099501B248E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestDBService", "RestDBService\RestDBService.csproj", "{87FAF089-020B-44D7-8293-7B745E08A3BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4E888E0F-F626-4DBF-AA5F-7099501B248E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E888E0F-F626-4DBF-AA5F-7099501B248E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E888E0F-F626-4DBF-AA5F-7099501B248E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87FAF089-020B-44D7-8293-7B745E08A3BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87FAF089-020B-44D7-8293-7B745E08A3BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87FAF089-020B-44D7-8293-7B745E08A3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87FAF089-020B-44D7-8293-7B745E08A3BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
