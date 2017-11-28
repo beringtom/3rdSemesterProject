@@ -18,10 +18,10 @@ namespace CardRelay
 
             UdpClient Reciver = new UdpClient(ipind);
 
-            IPAddress ip = IPAddress.Any;
-            IPEndPoint remote = new IPEndPoint(ip, ipind);
+            IPAddress endip = IPAddress.Any;
+            IPEndPoint remote = new IPEndPoint(endip, ipind);
 
-            Console.WriteLine("Server Blocked");
+            Console.WriteLine("Waiting for Numbers");
             while (true)
             {
                 try
@@ -33,7 +33,7 @@ namespace CardRelay
 
 
                     UdpClient Sender = new UdpClient(remote.Address.ToString(), ipout);
-                    byte[] send = Encoding.ASCII.GetBytes("CARD/" + DecodedData.Split('/')[2] + "/COMFIRMED");
+                    byte[] send = Encoding.ASCII.GetBytes("CARD/" + "COMFIRMED/" + DecodedData.Split('/')[2]);
                     Sender.Send(send, send.Length);
 
                 }
