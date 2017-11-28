@@ -20,7 +20,7 @@ namespace RestDBService
 
         public IList<Person> GetAllPersons()
         {
-            const string selectAllPersons = "select * from Person";
+            const string selectAllPersons = "select * from Person inner join Roles on Person.Person_Id = Roles.Roles_Id inner join Team on Person.Person_Id =Team.Team_Id";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
@@ -47,14 +47,18 @@ namespace RestDBService
             string firstname = reader.GetString(1);
             string lastname = reader.GetString(2);
             string email = reader.GetString(3);
-            string studentid = reader.GetString(4);
+            int fk_rolesid = reader.GetInt32(4);
+            int fk_teamid = reader.GetInt32(5);
+            //string studentid = reader.GetString(6);
             Person person = new Person()
             {
                 Person_Id = id,
                 Person_FirstName = firstname,
                 Person_LastName = lastname,
                 Person_Email = email,
-                Person_StudentId = studentid
+                FK_RolesId = fk_rolesid,
+                FK_TeamId = fk_teamid,
+                //Person_StudentId = studentid
             };
             return person;
         }

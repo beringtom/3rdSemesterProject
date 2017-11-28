@@ -45,6 +45,10 @@ namespace RestDBService
         [DataMember]
         public string Person_Email;
         [DataMember]
+        public int FK_RolesId;
+        [DataMember]
+        public int FK_TeamId;
+        [DataMember]
         public string Person_StudentId;
     }
 
