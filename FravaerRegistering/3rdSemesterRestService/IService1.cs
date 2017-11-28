@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -12,16 +13,12 @@ namespace _3rdSemesterRestService
     [ServiceContract]
     public interface IService1
     {
-
         [OperationContract]
-        string GetData(int value);
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, UriTemplate = "Person")]
+        IList<Person> GetAllPersons();
 
-        [OperationContract]
-        CompositeType GetDataUsingDataContract(CompositeType composite);
-
-        // TODO: Add your service operations here
-
-        
+        //[OperationContract]
+        //Person ReadPerson(IDataRecord reader);
     }
 
 
