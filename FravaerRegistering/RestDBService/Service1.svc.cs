@@ -95,6 +95,51 @@ namespace RestDBService
         }
 
 
+        public Person EditPerson(int personID, string fname, string lname, string email, string username,
+            string password, int roles, int studentid, int teamid)
+        {
+            string selectlogin = $"UPDATE Person SET Person_FirstName ={fname}, Person_LastName={lname}, Person_Email={email},FK_RolesId={roles}, FK_TeamId={teamid},Person_StudentId={studentid} WHERE Person_Id = {personID}";
+
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(selectlogin, databaseConnection))
+                {
+                    using (SqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                        Person student = new Person();
+                        while (reader.Read())
+                        {
+                            student = ReadPerson(reader);
+                        }
+                        EditLogin(username, password, personID);
+                        return student;
+                    }
+                }
+            }
+        }
+
+        public int EditLogin(string username, string password, int personid)
+        {
+            string CreateLogins = $"UPDATE login SET login_UserName={username}, login_Password={password} WHERE FK_PersonId={personid}";
+
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(CreateLogins, databaseConnection))
+                {
+                    int rowsaffected = selectCommand.ExecuteNonQuery();
+                    return rowsaffected;
+                }
+            }
+        }
+
+
+
+
+
+
+
         //opret ny person 
 
         public Person AddPerson(string fname, string lname, string email, string username, string password, int roles, int studentid, int teamid)
