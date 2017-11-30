@@ -94,6 +94,19 @@ namespace RestDBService
 
         }
 
+        public void AddTeam(string teamName)
+        {
+            string addteam = $"INSERT INTO Team('Team_Name') VALUES {teamName}";
+
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand addcommand = new SqlCommand(addteam, databaseConnection))
+                {
+                    addcommand.ExecuteNonQuery();
+                }
+            }
+        }
 
         public int DeletePerson(int personID)
         {
