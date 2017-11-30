@@ -19,7 +19,7 @@
     <tr>
         <td colspan="2"><h2>Slet Bruger</h2></td>
     </tr>
-    <form action="/sletbruger.php">
+    <form action="sletbruger.php">
         <tr>
             <td></td>
             <td>Fornavn:</td>

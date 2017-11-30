@@ -11,7 +11,7 @@
         <tr>
             <td colspan="2"><h2>Rediger Bruger</h2></td>
         </tr>
-        <form action"/redigerbruger.php">
+        <form action="redigerbruger.php">
             <tr>
                 <td>Fornavn:</td>
                 <td><input type="text" name="firstname" value=""></td>

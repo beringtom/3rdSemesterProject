@@ -19,7 +19,7 @@
     <tr>
         <td colspan="2"><h2>Opret Bruger</h2></td>
     </tr>
-    <form action="/opretbruger.php">
+    <form method="post">
         <tr>
             <td>Fornavn:</td>
             <td><input type="text" name="firstname" value="First Name"></td>
@@ -60,5 +60,45 @@
         </tr>
     </form>
 </table>
+
+
+
+
+
+<?php
+if(isset($_POST['submit']))
+{
+    $fname = $_POST['firstname'];
+    $lname = $_POST['lastname'];
+    $email = $_POST['email'];
+    $username = $_POST['username'];
+    $passw = $_POST['password'];
+    $rolle = $_POST['rolle'];
+    $studentid = $_POST['studentid'];
+    $teamid = 0;
+
+    $data = array("FirstName" => $fname, "LastName" => $lname, "Email" => $email, "UserName" => $username, "Password" => $passw, "Rolle" => $rolle, "StidentID" => $studentid, "TeamID" => $teamid);
+    $json_string = json_encode($data);
+
+
+    $uri = "";
+    $ch = curl_init($uri);
+
+
+// curl is good for more complex operations than just plain GET
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// TRUE to return the transfer as a string of the return value of curl_exec() instead of outputting it directly.
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($json_string))
+    );
+
+
+    $jsondata = curl_exec($ch);
+    $newuser = json_decode($jsondata, true);
+}
+?>
 </body>
 </html>
