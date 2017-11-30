@@ -99,8 +99,9 @@ namespace RestDBService
 
         public Person AddPerson(string fname, string lname, string email, string username, string password, int roles, int studentid, int teamid)
         {
-            AddPersonToDB(fname, lname, email, roles, studentid, teamid);
-            return null;
+            Person x = AddPersonToDB(fname, lname, email, roles, studentid, teamid);
+            AddLoginToDB(username, password, x.Person_Id);
+            return x;
         }
 
 
@@ -130,9 +131,9 @@ namespace RestDBService
             }
         }
 
-        public int AddLoginToDB()
+        public int AddLoginToDB(string username, string password, int personid)
         {
-            string CreateLogins = $"INSERT INTO login(login_UserName, login_Password, FK_PersonId) VALUES{addLogin.Login_UserName}, {addLogin.Login_Password}, {addLogin.FK_PersonId}";
+            string CreateLogins = $"INSERT INTO login(login_UserName, login_Password, FK_PersonId) VALUES{username}, {password}, {personid}";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
