@@ -87,17 +87,40 @@ namespace RestDBService
                             LoginList.Add(login);
                             
                         }
-                        //prøvet at sende logins personId over til finction GetOnePerns for at skrive den ud, men kan ikke få det til at virke
-                        //foreach (var i in LoginList)
-                        //{
-                        //   string personId = i.FK_PersonId.ToString();
-                        //    GetOnePersons(personId);
-                        //}
                         return LoginList;
                     }
                 }
             }
 
+        }
+
+
+        //opret ny person 
+
+       
+        public IList<Person> AddPersons(Person addPerson)
+        {
+            
+
+            string CreatePersons = "INSERT INTO Person(Person_FirstName, Person_LastName, Person_Email,FK_RolesId, FK_TeamId,Person_StudentId) VALUES('"+addPerson.Person_FirstName+"', '"+addPerson.Person_LastName+"', '"+addPerson.Person_Email+"', "+addPerson.FK_RolesId+", "+addPerson.FK_TeamId+", '"+addPerson.Person_StudentId+"')";
+
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(CreatePersons, databaseConnection))
+                {
+                    using (SqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                        List<Person> studentList = new List<Person>();
+                        while (reader.Read())
+                        {
+                            Person student = ReadPerson(reader);
+                            studentList.Add(student);
+                        }
+                        return studentList;
+                    }
+                }
+            }
         }
 
         public Person ReadPerson(IDataRecord reader)
@@ -106,6 +129,8 @@ namespace RestDBService
             string firstname = reader.GetString(1);
             string lastname = reader.GetString(2);
             string email = reader.GetString(3);
+            int fkrolesid = reader.GetInt32(4);
+            int fkteamid = reader.GetInt32(5);
             string rolesname = reader.GetString(9);
             string teamname = reader.GetString(11);
             string studentid = reader.GetString(6);
@@ -115,6 +140,8 @@ namespace RestDBService
                 Person_FirstName = firstname,
                 Person_LastName = lastname,
                 Person_Email = email,
+                FK_RolesId = fkrolesid,
+                FK_TeamId = fkteamid,
                 Roles_Name = rolesname,
                 Team_Name = teamname,
                 Person_StudentId = studentid
@@ -140,6 +167,6 @@ namespace RestDBService
 
         }
 
-        
+       
     }
 }
