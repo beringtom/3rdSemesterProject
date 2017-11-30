@@ -97,12 +97,20 @@ namespace RestDBService
 
         //opret ny person 
 
-       
-        public IList<Person> AddPersons(Person addPerson)
+        public Person AddPerson(string fname, string lname, string email, string username, string password, int roles, int studentid, int teamid)
+        {
+            AddPersonToDB(fname, lname, email, roles, studentid, teamid);
+            return null;
+        }
+
+
+
+
+        public Person AddPersonToDB(string fname, string lname, string email, int roles, int studentid, int teamid)
         {
             
 
-            string CreatePersons = "INSERT INTO Person(Person_FirstName, Person_LastName, Person_Email,FK_RolesId, FK_TeamId,Person_StudentId) VALUES('"+addPerson.Person_FirstName+"', '"+addPerson.Person_LastName+"', '"+addPerson.Person_Email+"', "+addPerson.FK_RolesId+", "+addPerson.FK_TeamId+", '"+addPerson.Person_StudentId+"')";
+            string CreatePersons = "INSERT INTO Person(Person_FirstName, Person_LastName, Person_Email,FK_RolesId, FK_TeamId,Person_StudentId) VALUES('"+fname+"', '"+lname+"', '"+email+"', "+roles+", "+teamid+", '"+studentid+"')";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
@@ -111,14 +119,28 @@ namespace RestDBService
                 {
                     using (SqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        List<Person> studentList = new List<Person>();
+                        Person student = new Person();
                         while (reader.Read())
                         {
-                            Person student = ReadPerson(reader);
-                            studentList.Add(student);
+                            student = ReadPerson(reader);
                         }
-                        return studentList;
+                        return student;
                     }
+                }
+            }
+        }
+
+        public int AddLoginToDB()
+        {
+            string CreateLogins = $"INSERT INTO login(login_UserName, login_Password, FK_PersonId) VALUES{addLogin.Login_UserName}, {addLogin.Login_Password}, {addLogin.FK_PersonId}";
+
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(CreateLogins, databaseConnection))
+                {
+                    int rowsaffected = selectCommand.ExecuteNonQuery();
+                    return rowsaffected;
                 }
             }
         }

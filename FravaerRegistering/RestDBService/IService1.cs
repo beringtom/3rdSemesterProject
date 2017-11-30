@@ -27,7 +27,7 @@ namespace RestDBService
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Person")]
         IList<Person> AddPersons(Person addPerson);
-
+        
         //[OperationContract]
         //Person ReadPerson(IDataRecord reader);
     }
