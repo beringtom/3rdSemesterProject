@@ -108,7 +108,7 @@ namespace RestDBService
             }
         }
 
-        public int DeletePerson(int personID)
+        public int DeletePerson(string personID)
         {
             string deletecommand = $"DELETE FROM Person WHERE Person_Id = {personID}";
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
@@ -116,6 +116,7 @@ namespace RestDBService
                 databaseConnection.Open();
                 using (SqlCommand selectCommand = new SqlCommand(deletecommand, databaseConnection))
                 {
+                    DeleteLogin(int.Parse(personID));
                     int rowsaffected = selectCommand.ExecuteNonQuery();
 
                     return rowsaffected;
@@ -138,16 +139,16 @@ namespace RestDBService
             }
         }
 
-        public Person EditPerson(int personID, string fname, string lname, string email, string username,
-            string password, int roles, int studentid, int teamid)
+        public Person EditPerson(string personID, AllPersonData p)
         {
-            string updatecommand = $"UPDATE Person SET Person_FirstName ={fname}, Person_LastName={lname}, Person_Email={email},FK_RolesId={roles}, FK_TeamId={teamid},Person_StudentId={studentid} WHERE Person_Id = {personID}";
+            string updatecommand = $"UPDATE Person SET Person_FirstName ={p.fname}, Person_LastName={p.lname}, Person_Email={p.email},FK_RolesId={p.roles}, FK_TeamId={p.teamid},Person_StudentId={p.studentid} WHERE Person_Id = {personID}";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
                 databaseConnection.Open();
                 using (SqlCommand selectCommand = new SqlCommand(updatecommand, databaseConnection))
                 {
+                    EditLogin(p.username, p.password, int.Parse(personID));
                     using (SqlDataReader reader = selectCommand.ExecuteReader())
                     {
                         Person student = new Person();
@@ -155,7 +156,7 @@ namespace RestDBService
                         {
                             student = ReadPerson(reader);
                         }
-                        EditLogin(username, password, personID);
+                        
                         return student;
                     }
                 }
@@ -185,43 +186,32 @@ namespace RestDBService
 
         //opret ny person 
 
-        public Person AddPerson(string fname, string lname, string email, string username, string password, int roles, int studentid, int teamid)
+        public void AddPerson(AllPersonData p)
         {
-            Person x = AddPersonToDB(fname, lname, email, roles, studentid, teamid);
-            AddLoginToDB(username, password, x.Person_Id);
-            return x;
+            AddPersonToDB(p.fname, p.lname, p.email, p.roles, p.studentid, p.teamid);
+            AddLoginToDB(p.username, p.password);
         }
 
 
 
 
-        public Person AddPersonToDB(string fname, string lname, string email, int roles, int studentid, int teamid)
+        public void AddPersonToDB(string fname, string lname, string email, int roles, int studentid, int teamid)
         {
-            
-
             string CreatePersons = "INSERT INTO Person(Person_FirstName, Person_LastName, Person_Email,FK_RolesId, FK_TeamId,Person_StudentId) VALUES('"+fname+"', '"+lname+"', '"+email+"', "+roles+", "+teamid+", '"+studentid+"')";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
                 databaseConnection.Open();
-                using (SqlCommand selectCommand = new SqlCommand(CreatePersons, databaseConnection))
+                using (SqlCommand insertCommand = new SqlCommand(CreatePersons, databaseConnection))
                 {
-                    using (SqlDataReader reader = selectCommand.ExecuteReader())
-                    {
-                        Person student = new Person();
-                        while (reader.Read())
-                        {
-                            student = ReadPerson(reader);
-                        }
-                        return student;
-                    }
+                    insertCommand.ExecuteNonQuery();
                 }
             }
         }
 
-        public int AddLoginToDB(string username, string password, int personid)
+        public int AddLoginToDB(string username, string password)
         {
-            string CreateLogins = $"INSERT INTO login(login_UserName, login_Password, FK_PersonId) VALUES{username}, {password}, {personid}";
+            string CreateLogins = $"INSERT INTO login(login_UserName, login_Password, FK_PersonId) VALUES({username}, {password}, {GetLastIdentity("Person")})";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
@@ -230,6 +220,25 @@ namespace RestDBService
                 {
                     int rowsaffected = selectCommand.ExecuteNonQuery();
                     return rowsaffected;
+                }
+            }
+        }
+
+        public int GetLastIdentity(string tablename)
+        {
+            string identitysql = $"SELECT IDENT_CURRENT('{tablename}')";
+
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(identitysql, databaseConnection))
+                {
+                    int identity = -1;
+                    using (SqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                        identity = reader.GetInt32(0);
+                    }
+                    return identity;
                 }
             }
         }

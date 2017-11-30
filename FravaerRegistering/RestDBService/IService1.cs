@@ -13,7 +13,7 @@ namespace RestDBService
     public interface IService1
     {
         [OperationContract]
-        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, UriTemplate = "Person")]
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, UriTemplate = "Person/")]
         IList<Person> GetAllPersons();
 
         [OperationContract]
@@ -21,20 +21,21 @@ namespace RestDBService
         IList<Person> GetOnePersons(string id);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Login")]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Login/")]
         IList<Login> Getlogin(Login loginUserPaswords);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Person")]
-        Person AddPerson(string fname, string lname, string email, string username, string password, int roles, int studentid, int teamid);
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Person/")]
+        void AddPerson(AllPersonData p);
+
 
         [OperationContract]
         [WebInvoke(Method = "PUT", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Person/{id}")]
-        Person EditPerson(int peersonID, string fname, string lname, string email, string username, string password, int roles, int studentid, int teamid);
+        Person EditPerson(string id, AllPersonData p);
 
         [OperationContract]
         [WebInvoke(Method = "DELETE", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Person/{id}")]
-        int DeletePerson(int peersonID);
+        int DeletePerson(string id);
 
 
         //[OperationContract]
@@ -113,6 +114,26 @@ namespace RestDBService
         public int Team_Id;
         [DataMember]
         public string Team_Name;
+    }
+
+    public class AllPersonData
+    {
+        [DataMember]
+        public string fname;
+        [DataMember]
+        public string lname;
+        [DataMember]
+        public string email;
+        [DataMember]
+        public string username;
+        [DataMember]
+        public string password;
+        [DataMember]
+        public int roles;
+        [DataMember]
+        public int studentid;
+        [DataMember]
+        public int teamid;
     }
 
     // Schedule bliver sandsynligvis slettet igen, hvis den er unødvendig.
