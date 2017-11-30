@@ -16,6 +16,14 @@ namespace RestDBService
         [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, UriTemplate = "Person")]
         IList<Person> GetAllPersons();
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, UriTemplate = "Person/{id}")]
+        IList<Person> GetOnePersons(string id);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Login")]
+        IList<Login> Getlogin(Login loginUserPaswords);
+
         //[OperationContract]
         //Person ReadPerson(IDataRecord reader);
     }
@@ -29,9 +37,11 @@ namespace RestDBService
         [DataMember]
         public int Login_Id;
         [DataMember]
-        public string Login_Username;
+        public string Login_UserName;
         [DataMember]
         public string Login_Password;
+        [DataMember]
+        public int FK_PersonId;
     }
 
     public class Person
@@ -44,6 +54,10 @@ namespace RestDBService
         public string Person_LastName;
         [DataMember]
         public string Person_Email;
+        [DataMember]
+        public string Roles_Name;
+        [DataMember]
+        public string Team_Name;
         [DataMember]
         public string Person_StudentId;
     }
