@@ -45,6 +45,16 @@
             <td><input type="text" name="studentid" value="eg. 48484848"></td>
         </tr>
         <tr>
+            <td>Rolle:</td>
+            <td><select name="rolle">
+                    <option value="0">--None--</option>
+                    <option value="1">Studerende</option>
+                    <option value="2">Underviser</option>
+                    <option value="3">Uddannelses Leder</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
             <td></td>
             <td><input type="submit" value="Submit" style="float:right;"></td>
         </tr>
