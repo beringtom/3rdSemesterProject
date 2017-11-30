@@ -95,12 +95,88 @@ namespace RestDBService
         }
 
 
+        public int DeletePerson(int personID)
+        {
+            string deletecommand = $"DELETE FROM Person WHERE Person_Id = {personID}";
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(deletecommand, databaseConnection))
+                {
+                    int rowsaffected = selectCommand.ExecuteNonQuery();
+
+                    return rowsaffected;
+                }
+            }
+        }
+
+        public int DeleteLogin(int personID)
+        {
+            string deletecommand = $"DELETE FROM login WHERE FK_PersonId = {personID}";
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(deletecommand, databaseConnection))
+                {
+                    int rowsaffected = selectCommand.ExecuteNonQuery();
+
+                    return rowsaffected;
+                }
+            }
+        }
+
+        public Person EditPerson(int personID, string fname, string lname, string email, string username,
+            string password, int roles, int studentid, int teamid)
+        {
+            string updatecommand = $"UPDATE Person SET Person_FirstName ={fname}, Person_LastName={lname}, Person_Email={email},FK_RolesId={roles}, FK_TeamId={teamid},Person_StudentId={studentid} WHERE Person_Id = {personID}";
+
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(updatecommand, databaseConnection))
+                {
+                    using (SqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                        Person student = new Person();
+                        while (reader.Read())
+                        {
+                            student = ReadPerson(reader);
+                        }
+                        EditLogin(username, password, personID);
+                        return student;
+                    }
+                }
+            }
+        }
+
+        public int EditLogin(string username, string password, int personid)
+        {
+            string updatecommand = $"UPDATE login SET login_UserName={username}, login_Password={password} WHERE FK_PersonId={personid}";
+
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(updatecommand, databaseConnection))
+                {
+                    int rowsaffected = selectCommand.ExecuteNonQuery();
+                    return rowsaffected;
+                }
+            }
+        }
+
+
+
+
+
+
+
         //opret ny person 
 
         public Person AddPerson(string fname, string lname, string email, string username, string password, int roles, int studentid, int teamid)
         {
-            AddPersonToDB(fname, lname, email, roles, studentid, teamid);
-            return null;
+            Person x = AddPersonToDB(fname, lname, email, roles, studentid, teamid);
+            AddLoginToDB(username, password, x.Person_Id);
+            return x;
         }
 
 
@@ -130,9 +206,9 @@ namespace RestDBService
             }
         }
 
-        public int AddLoginToDB()
+        public int AddLoginToDB(string username, string password, int personid)
         {
-            string CreateLogins = $"INSERT INTO login(login_UserName, login_Password, FK_PersonId) VALUES{addLogin.Login_UserName}, {addLogin.Login_Password}, {addLogin.FK_PersonId}";
+            string CreateLogins = $"INSERT INTO login(login_UserName, login_Password, FK_PersonId) VALUES{username}, {password}, {personid}";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
