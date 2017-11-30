@@ -22,27 +22,27 @@
     <form method="post">
         <tr>
             <td>Fornavn:</td>
-            <td><input type="text" name="firstname" value="First Name"></td>
+            <td><input type="text" name="firstname" placeholder="First Name"></td>
         </tr>
         <tr>
             <td>Efternavn:</td>
-            <td><input type="text" name="lastname" value="Last Name"></td>
+            <td><input type="text" name="lastname" placeholder="Last Name"></td>
         </tr>
         <tr>
             <td>Email:</td>
-            <td><input type="text" name="email" value="username@edu.easj.dk"></td>
+            <td><input type="text" name="email" placeholder="username@edu.easj.dk"></td>
         </tr>
         <tr>
             <td>Brugernavn:</td>
-            <td><input type="text" name="username" value="Username"></td>
+            <td><input type="text" name="username" placeholder="Username"></td>
         </tr>
         <tr>
             <td>Password:</td>
-            <td><input type="text" name="password" value="eg. velkommen"></td>
+            <td><input type="text" name="password" placeholder="eg. password"></td>
         </tr>
         <tr>
             <td>Student ID:</td>
-            <td><input type="text" name="studentid" value="eg. 48484848"></td>
+            <td><input type="text" name="studentid" placeholder="eg. 48484848"></td>
         </tr>
         <tr>
             <td>Rolle:</td>
