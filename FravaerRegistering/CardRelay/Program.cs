@@ -33,7 +33,7 @@ namespace CardRelay
 
 
                     UdpClient Sender = new UdpClient(remote.Address.ToString(), ipout);
-                    byte[] send = Encoding.ASCII.GetBytes("CARD/" + "COMFIRMED/" + DecodedData.Split('/')[2]);
+                    byte[] send = Encoding.ASCII.GetBytes("CARD/" + "CHECKIN/" + DecodedData.Split('/')[2]);
                     Sender.Send(send, send.Length);
 
                 }
