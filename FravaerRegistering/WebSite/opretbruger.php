@@ -75,7 +75,7 @@ if(isset($_POST['submit']))
     $passw = $_POST['password'];
     $rolle = $_POST['rolle'];
     $studentid = $_POST['studentid'];
-    $teamid = 1;
+    $teamid = 0;
 
     $data = array("FirstName" => $fname, "LastName" => $lname, "Email" => $email, "UserName" => $username, "Password" => $passw, "Rolle" => $rolle, "StidentID" => $studentid, "TeamID" => $teamid);
     $json_string = json_encode($data);
