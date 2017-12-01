@@ -37,6 +37,10 @@ namespace RestDBService
         [WebInvoke(Method = "DELETE", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Person/{id}")]
         int DeletePerson(string id);
 
+        [OperationContract]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Team/")]
+        void AddTeam(string teamName);
 
         //[OperationContract]
         //Person ReadPerson(IDataRecord reader);
