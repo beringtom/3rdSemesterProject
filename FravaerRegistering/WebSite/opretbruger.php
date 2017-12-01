@@ -47,7 +47,6 @@
         <tr>
             <td>Rolle:</td>
             <td><select name="rolle">
-                    <option value="0">--None--</option>
                     <option value="1">Studerende</option>
                     <option value="2">Underviser</option>
                     <option value="3">Uddannelses Leder</option>
@@ -76,12 +75,12 @@ if(isset($_POST['submit']))
     $passw = $_POST['password'];
     $rolle = $_POST['rolle'];
     $studentid = $_POST['studentid'];
-    $teamid = 0;
+    $teamid = 1;
 
     $data = array("fname" => $fname, "lname" => $lname, "email" => $email, "username" => $username, "password" => $passw, "roles" => $rolle, "studentid" => $studentid, "teamid" => $teamid);
     $json_string = json_encode($data);
 
-
+    print_r($json_string);
     $uri = "http://restfravaerservice.azurewebsites.net/service1.svc/Person/";
     $ch = curl_init($uri);
 
