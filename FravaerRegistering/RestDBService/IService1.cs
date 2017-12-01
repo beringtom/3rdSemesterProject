@@ -14,11 +14,11 @@ namespace RestDBService
     {
         [OperationContract]
         [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, UriTemplate = "Person/")]
-        IList<Person> GetAllPersons();
+        IList<AllPersonData> GetAllPersons();
 
         [OperationContract]
         [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, UriTemplate = "Person/{id}")]
-        IList<Person> GetOnePersons(string id);
+        IList<AllPersonData> GetOnePersons(string id);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Login/")]
@@ -118,22 +118,37 @@ namespace RestDBService
 
     public class AllPersonData
     {
+        public int rid;
         [DataMember]
-        public string fname;
+        public string firstname;
         [DataMember]
-        public string lname;
+        public string lastname;
         [DataMember]
         public string email;
+        [DataMember]
+        public int fkrolesid;
+        [DataMember]
+        public int fkteamid;
+        [DataMember]
+        public string studentid;
+        [DataMember]
+        public int rolesid;
+        [DataMember]
+        public string rolestype;
+        [DataMember]
+        public string rolesname;
+        [DataMember]
+        public int teamid;
+        [DataMember]
+        public string teamname;
+        [DataMember]
+        public int loginid;
         [DataMember]
         public string username;
         [DataMember]
         public string password;
         [DataMember]
-        public int roles;
-        [DataMember]
-        public int studentid;
-        [DataMember]
-        public int teamid;
+        public int fkpersonid;
     }
 
     // Schedule bliver sandsynligvis slettet igen, hvis den er unødvendig.

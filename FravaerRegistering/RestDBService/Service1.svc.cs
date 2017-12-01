@@ -19,9 +19,9 @@ namespace RestDBService
                 "Server=tcp:3rdsemesterprojectserver.database.windows.net,1433;Initial Catalog=3rdSemesterProjectDB;Persist Security Info=False;User ID=team4;Password=Noot1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
             ;
         //henter alle personer
-        public IList<Person> GetAllPersons()
+        public IList<AllPersonData> GetAllPersons()
         {
-            const string selectAllPersons = "select * from Person inner join Roles on Person.Person_Id = Roles.Roles_Id inner join Team on Person.Person_Id =Team.Team_Id";
+            const string selectAllPersons = "select * from Person inner join Roles on Person.FK_RolesId = Roles.Roles_Id inner join Team on Person.FK_TeamId =Team.Team_Id inner join login on Person.Person_Id = login.FK_PersonId";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
@@ -30,10 +30,10 @@ namespace RestDBService
                 {
                     using (SqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        List<Person> studentList = new List<Person>();
+                        List<AllPersonData> studentList = new List<AllPersonData>();
                         while (reader.Read())
                         {
-                            Person student = ReadPerson(reader);
+                            AllPersonData student = ReadAllPersonData(reader);
                             studentList.Add(student);
                         }
                         return studentList;
@@ -42,11 +42,11 @@ namespace RestDBService
             }
         }
         //henter en person
-        public IList<Person> GetOnePersons(string id)
+        public IList<AllPersonData> GetOnePersons(string id)
         {
             int idInt = int.Parse(id);
 
-            string selectAllPersons = "select * from Person inner join Roles on Person.Person_Id = Roles.Roles_Id inner join Team on Person.Person_Id =Team.Team_Id where Person_Id ="+ idInt;
+            string selectAllPersons = "select * from Person inner join Roles on Person.FK_RolesId = Roles.Roles_Id inner join Team on Person.FK_TeamId =Team.Team_Id inner join login on Person.Person_Id = login.FK_PersonId where Person_Id =" + idInt;
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
@@ -55,10 +55,10 @@ namespace RestDBService
                 {
                     using (SqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        List<Person> studentList = new List<Person>();
+                        List<AllPersonData> studentList = new List<AllPersonData>();
                         while (reader.Read())
                         {
-                            Person student = ReadPerson(reader);
+                            AllPersonData student = ReadAllPersonData(reader);
                             studentList.Add(student);
                         }
                         return studentList;
@@ -141,7 +141,7 @@ namespace RestDBService
 
         public Person EditPerson(string personID, AllPersonData p)
         {
-            string updatecommand = $"UPDATE Person SET Person_FirstName ={p.fname}, Person_LastName={p.lname}, Person_Email={p.email},FK_RolesId={p.roles}, FK_TeamId={p.teamid},Person_StudentId={p.studentid} WHERE Person_Id = {personID}";
+            string updatecommand = $"UPDATE Person SET Person_FirstName ={p.firstname}, Person_LastName={p.lastname}, Person_Email={p.email},FK_RolesId={p.rolesid}, FK_TeamId={p.teamid},Person_StudentId={p.studentid} WHERE Person_Id = {personID}";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
@@ -188,7 +188,7 @@ namespace RestDBService
 
         public void AddPerson(AllPersonData p)
         {
-            AddPersonToDB(p.fname, p.lname, p.email, p.roles, p.studentid, p.teamid);
+            AddPersonToDB(p.firstname, p.lastname, p.email, p.rolesid, int.Parse(p.studentid), p.teamid);
             AddLoginToDB(p.username, p.password);
         }
 
@@ -265,6 +265,46 @@ namespace RestDBService
                 Roles_Name = rolesname,
                 Team_Name = teamname,
                 Person_StudentId = studentid
+            };
+            return person;
+        }
+
+        public AllPersonData ReadAllPersonData(IDataRecord reader)
+        {
+            int rrid = reader.GetInt32(0);
+            string rfirstname = reader.GetString(1);
+            string rlastname = reader.GetString(2);
+            string remail = reader.GetString(3);
+            int rfkrolesid = reader.GetInt32(4);
+            int rfkteamid = reader.GetInt32(5);
+            string rstudentid = reader.GetString(6);
+            int rrolesid = reader.GetInt32(7);
+            string rrolestype = reader.GetString(8);
+            string rrolesname = reader.GetString(9);
+            int rteamid = reader.GetInt32(10);
+            string rteamname = reader.GetString(11);
+            int rloginid = reader.GetInt32(12);
+            string rusername = reader.GetString(13);
+            string rpassword = reader.GetString(14);
+            int rfkpersonid = reader.GetInt32(15);
+            AllPersonData person = new AllPersonData()
+            {
+                rid = rrid,
+                firstname = rfirstname,
+                lastname = rlastname,
+                email = remail,
+                fkrolesid = rfkrolesid,
+                fkteamid = rfkteamid,
+                studentid = rstudentid,
+                rolesid = rrolesid,
+                rolestype = rrolestype,
+                rolesname = rrolesname,
+                teamid = rteamid,
+                teamname = rteamname,
+                loginid = rloginid,
+                username = rusername,
+                password = rpassword,
+                fkpersonid = rfkpersonid
             };
             return person;
         }
