@@ -19,7 +19,7 @@
     <tr>
         <td colspan="2"><h2>Opret Bruger</h2></td>
     </tr>
-    <form method="post">
+    <form action="#" method="post">
         <tr>
             <td>Fornavn:</td>
             <td><input type="text" name="firstname" placeholder="First Name"></td>
@@ -56,7 +56,7 @@
         </tr>
         <tr>
             <td></td>
-            <td><input type="submit" value="Submit" style="float:right;"></td>
+            <td><input type="submit" value="Submit" name="submit" style="float:right;"></td>
         </tr>
     </form>
 </table>
@@ -76,13 +76,13 @@ if(isset($_POST['submit']))
     $passw = $_POST['password'];
     $rolle = $_POST['rolle'];
     $studentid = $_POST['studentid'];
-    $teamid = 1;
+    $teamid = 0;
 
-    $data = array("FirstName" => $fname, "LastName" => $lname, "Email" => $email, "UserName" => $username, "Password" => $passw, "Rolle" => $rolle, "StidentID" => $studentid, "TeamID" => $teamid);
+    $data = array("fname" => $fname, "lname" => $lname, "email" => $email, "username" => $username, "password" => $passw, "roles" => $rolle, "studentid" => $studentid, "teamid" => $teamid);
     $json_string = json_encode($data);
 
 
-    $uri = "";
+    $uri = "http://restfravaerservice.azurewebsites.net/service1.svc/Person/";
     $ch = curl_init($uri);
 
 
