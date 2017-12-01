@@ -31,7 +31,7 @@ namespace RestDBService
 
         [OperationContract]
         [WebInvoke(Method = "PUT", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Person/{id}")]
-        Person EditPerson(string id, AllPersonData p);
+        Person EditPerson(string id, PersonDataToAdd p);
 
         [OperationContract]
         [WebInvoke(Method = "DELETE", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Person/{id}")]

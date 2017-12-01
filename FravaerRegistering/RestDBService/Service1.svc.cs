@@ -139,17 +139,25 @@ namespace RestDBService
             }
         }
 
-        public Person EditPerson(string personID, AllPersonData p)
+        public Person EditPerson(string personID, PersonDataToAdd p)
         {
-            string updatecommand = $"UPDATE Person SET Person_FirstName ={p.firstname}, Person_LastName={p.lastname}, Person_Email={p.email},FK_RolesId={p.rolesid}, FK_TeamId={p.teamid},Person_StudentId={p.studentid} WHERE Person_Id = {personID}";
+            string updatequery = $"UPDATE Person SET Person_FirstName =@fname, Person_LastName=@lname, Person_Email=@email,FK_RolesId=@fkroleid, FK_TeamId=@fkteamid,Person_StudentId=@studentid WHERE Person_Id = @personid";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
                 databaseConnection.Open();
-                using (SqlCommand selectCommand = new SqlCommand(updatecommand, databaseConnection))
+                using (SqlCommand updatecommand = new SqlCommand(updatequery, databaseConnection))
                 {
+                    updatecommand.Parameters.AddWithValue("@fname", p.fname);
+                    updatecommand.Parameters.AddWithValue("@lname", p.lname);
+                    updatecommand.Parameters.AddWithValue("@email", p.email);
+                    updatecommand.Parameters.AddWithValue("@fkroleid", p.roles);
+                    updatecommand.Parameters.AddWithValue("@fkteamid", p.teamid);
+                    updatecommand.Parameters.AddWithValue("@studentid", p.studentid);
+                    updatecommand.Parameters.AddWithValue("@personid", personID);
+
                     EditLogin(p.username, p.password, int.Parse(personID));
-                    using (SqlDataReader reader = selectCommand.ExecuteReader())
+                    using (SqlDataReader reader = updatecommand.ExecuteReader())
                     {
                         Person student = new Person();
                         while (reader.Read())
@@ -165,14 +173,18 @@ namespace RestDBService
 
         public int EditLogin(string username, string password, int personid)
         {
-            string updatecommand = $"UPDATE login SET login_UserName={username}, login_Password={password} WHERE FK_PersonId={personid}";
+            string updatequery = $"UPDATE login SET login_UserName=@uname, login_Password=@pass WHERE FK_PersonId=@personid";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
                 databaseConnection.Open();
-                using (SqlCommand selectCommand = new SqlCommand(updatecommand, databaseConnection))
+                using (SqlCommand updateCommand = new SqlCommand(updatequery, databaseConnection))
                 {
-                    int rowsaffected = selectCommand.ExecuteNonQuery();
+                    updateCommand.Parameters.AddWithValue("@uname", username);
+                    updateCommand.Parameters.AddWithValue("@pass", password);
+                    updateCommand.Parameters.AddWithValue("@personid", personid);
+
+                    int rowsaffected = updateCommand.ExecuteNonQuery();
                     return rowsaffected;
                 }
             }
