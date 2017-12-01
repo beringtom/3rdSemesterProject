@@ -19,7 +19,7 @@
     <div class="page-header">
         <h1>Login</h1>
     </div>
-            <form class="col-4" action="/loginform.php">
+            <form class="col-4" method="post">
 
                 <label for="uname" class="form-group col-5">Username:</label>
                 <input class="form-control col-7 float-right" id="uname" type="text" name="username" placeholder="brugernavn">
