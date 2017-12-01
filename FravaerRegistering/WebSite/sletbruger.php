@@ -26,21 +26,28 @@
             <td>Efternavn:</td>
         </tr>
         <tr>
-            <td><input type="checkbox" name="sletuser[x]"></td>
+            <td><input type="checkbox" name="sletuser" value="1"></td>
             <td>Tom</td>
             <td>Bering Svensson</td>
         </tr>
         <tr>
-            <td><input type="checkbox" name="sletuser[x]"></td>
+            <td><input type="checkbox" name="sletuser" value="2"></td>
             <td>Ricco</td>
             <td>Jørgensen</td>
         </tr>
         <tr>
             <td></td>
             <td></td>
-            <td><input type="submit" value="Submit" style="float:right;"></td>
+            <td><input type="submit" value="Submit" name="slet" style="float:right;"></td>
         </tr>
     </form>
 </table>
 </body>
 </html>
+<?php
+include 'Funktion/sletPersonFunKtion.php';
+if(isset ($_REQUEST['slet'])) {
+    $id = $_REQUEST['sletuser'];
+    slet('http://restfravaerservice.azurewebsites.net/service1.svc/person/".$id."');
+}
+?>
