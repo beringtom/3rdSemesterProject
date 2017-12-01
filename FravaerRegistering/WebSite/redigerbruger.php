@@ -12,7 +12,7 @@ $getresturi = "http://restfravaerservice.azurewebsites.net/service1.svc/Person/"
 $content = file_get_contents($getresturi);
 
 $decodedContent = json_decode($content);
-print_r($decodedContent[0]);
+print_r($_SERVER['REQUEST_URI']);
 ?>
 
 
@@ -20,7 +20,7 @@ print_r($decodedContent[0]);
     <tr>
         <td colspan="2"><h2>Rediger Bruger</h2></td>
     </tr>
-    <form action="redigerbruger.php">
+    <form method="post">
         <tr>
             <td>Fornavn:</td>
             <td><input type="text" name="firstname" value="<?php echo $decodedContent[0]->firstname ?>"></td>
@@ -57,7 +57,7 @@ print_r($decodedContent[0]);
         </tr>
         <tr>
             <td></td>
-            <td><input type="submit" value="Submit" style="float:right;"></td>
+            <td><input type="submit" name="submit" value="Submit" style="float:right;"></td>
         </tr>
     </form>
 </table>
@@ -74,7 +74,7 @@ if(isset($_POST['submit']))
     $studentid = $_POST['studentid'];
     $teamid = 1;
 
-    $data = array("FirstName" => $fname, "LastName" => $lname, "Email" => $email, "UserName" => $username, "Password" => $passw, "Rolle" => $rolle, "StidentID" => $studentid, "TeamID" => $teamid);
+    $data = array("fname" => $fname, "lname" => $lname, "email" => $email, "username" => $username, "password" => $passw, "roles" => $rolle, "studentid" => $studentid, "teamid" => $teamid);
     $json_string = json_encode($data);
 
 
@@ -95,6 +95,10 @@ if(isset($_POST['submit']))
 
     $jsondata = curl_exec($ch);
     $newuser = json_decode($jsondata, true);
+
+
+    header("Location: ".$_SERVER['REQUEST_URI']);
+
 }
 ?>
 </body>
