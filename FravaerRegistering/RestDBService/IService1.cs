@@ -26,7 +26,7 @@ namespace RestDBService
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Person/")]
-        void AddPerson(AllPersonData p);
+        void AddPerson(PersonDataToAdd p);
 
 
         [OperationContract]
@@ -116,7 +116,27 @@ namespace RestDBService
         public string Team_Name;
     }
 
-    public class AllPersonData
+    public class PersonDataToAdd
+    {
+         [DataMember]
+         public string fname;
+         [DataMember]
+         public string lname;
+         [DataMember]
+         public string email;
+         [DataMember]
+         public string username;
+         [DataMember]
+         public string password;
+         [DataMember]
+         public int roles;
+         [DataMember]
+         public int studentid;
+         [DataMember]
+         public int teamid;
+     }
+
+public class AllPersonData
     {
         public int rid;
         [DataMember]

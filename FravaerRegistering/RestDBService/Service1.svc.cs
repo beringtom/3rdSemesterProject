@@ -186,9 +186,9 @@ namespace RestDBService
 
         //opret ny person 
 
-        public void AddPerson(AllPersonData p)
+        public void AddPerson(PersonDataToAdd p)
         {
-            decimal personId = AddPersonToDB(p.firstname, p.lastname, p.email, p.rolesid, int.Parse(p.studentid), p.teamid);
+            decimal personId = AddPersonToDB(p.fname, p.lname, p.email, p.roles, p.studentid, p.teamid);
             int personIdInt = decimal.ToInt32(personId);
             AddLoginToDB(p.username, p.password, personIdInt);
         }
