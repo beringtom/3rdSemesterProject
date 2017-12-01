@@ -188,60 +188,61 @@ namespace RestDBService
 
         public void AddPerson(AllPersonData p)
         {
-            AddPersonToDB(p.fname, p.lname, p.email, p.roles, p.studentid, p.teamid);
-            AddLoginToDB(p.username, p.password);
+            decimal personId = AddPersonToDB(p.fname, p.lname, p.email, p.roles, p.studentid, p.teamid);
+            int personIdInt = decimal.ToInt32(personId);
+            AddLoginToDB(p.username, p.password, personIdInt);
         }
 
 
 
 
-        public void AddPersonToDB(string fname, string lname, string email, int roles, int studentid, int teamid)
+        public decimal AddPersonToDB(string fname, string lname, string email, int roles, int studentid, int teamid)
         {
             string CreatePersons = "INSERT INTO Person(Person_FirstName, Person_LastName, Person_Email,FK_RolesId, FK_TeamId,Person_StudentId) VALUES('"+fname+"', '"+lname+"', '"+email+"', "+roles+", "+teamid+", '"+studentid+"')";
-
+            string identitysql = "SELECT IDENT_CURRENT('Person') as PersonId";
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
                 databaseConnection.Open();
                 using (SqlCommand insertCommand = new SqlCommand(CreatePersons, databaseConnection))
                 {
                     insertCommand.ExecuteNonQuery();
+
                 }
+                using (SqlCommand selectCommand = new SqlCommand(identitysql, databaseConnection))
+                {
+                    using (SqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                         bool IsId = reader.Read();
+                        if (IsId == false)
+                            return -1;
+                        decimal lastId = reader.GetDecimal(0);
+                        return lastId;
+                    }
+                }
+                  
             }
         }
 
-        public int AddLoginToDB(string username, string password)
+        public int AddLoginToDB(string username, string password, int personId)
         {
-            string CreateLogins = $"INSERT INTO login(login_UserName, login_Password, FK_PersonId) VALUES({username}, {password}, {GetLastIdentity("Person")})";
+            string CreateLogins = $"INSERT INTO login(login_UserName, login_Password, FK_PersonId) VALUES(@username, @password, @personId)";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
                 databaseConnection.Open();
-                using (SqlCommand selectCommand = new SqlCommand(CreateLogins, databaseConnection))
+               
+                using (SqlCommand insertCommand = new SqlCommand(CreateLogins, databaseConnection))
                 {
-                    int rowsaffected = selectCommand.ExecuteNonQuery();
+                    insertCommand.Parameters.AddWithValue("@username", username);
+                    insertCommand.Parameters.AddWithValue("@password", password);
+                    insertCommand.Parameters.AddWithValue("@personId", personId);
+                    int rowsaffected = insertCommand.ExecuteNonQuery();
                     return rowsaffected;
                 }
             }
         }
 
-        public int GetLastIdentity(string tablename)
-        {
-            string identitysql = $"SELECT IDENT_CURRENT('{tablename}')";
-
-            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
-            {
-                databaseConnection.Open();
-                using (SqlCommand selectCommand = new SqlCommand(identitysql, databaseConnection))
-                {
-                    int identity = -1;
-                    using (SqlDataReader reader = selectCommand.ExecuteReader())
-                    {
-                        identity = reader.GetInt32(0);
-                    }
-                    return identity;
-                }
-            }
-        }
+       
 
         public Person ReadPerson(IDataRecord reader)
         {
@@ -288,5 +289,7 @@ namespace RestDBService
         }
 
        
+        }
+
+
     }
-}

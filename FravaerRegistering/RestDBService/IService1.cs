@@ -136,6 +136,8 @@ namespace RestDBService
         public int teamid;
     }
 
+    
+
     // Schedule bliver sandsynligvis slettet igen, hvis den er unødvendig.
     // Der skal mere research af Outlook til før vi ved det.
 
