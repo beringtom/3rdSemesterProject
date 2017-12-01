@@ -94,16 +94,16 @@ namespace RestDBService
 
         }
 
-        public void AddTeam(string teamName)
+        public void AddTeam(Team t)
         {
-            string addteam = $"INSERT INTO Team('Team_Name') VALUES @tname";
+            string addteam = $"INSERT INTO Team(Team_Name) VALUES (@tname)";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
                 databaseConnection.Open();
                 using (SqlCommand addcommand = new SqlCommand(addteam, databaseConnection))
                 {
-                    addcommand.Parameters.AddWithValue("@tname", teamName);
+                    addcommand.Parameters.AddWithValue("@tname", t.Team_Name);
                     addcommand.ExecuteNonQuery();
                 }
             }

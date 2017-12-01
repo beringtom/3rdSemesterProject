@@ -40,7 +40,7 @@ namespace RestDBService
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "Team/")]
-        void AddTeam(string teamName);
+        void AddTeam(Team t);
 
         //[OperationContract]
         //Person ReadPerson(IDataRecord reader);
