@@ -1,3 +1,8 @@
+<?php
+session_start();
+ob_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +18,7 @@ $content = file_get_contents($getresturi);
 
 $decodedContent = json_decode($content);
 print_r($_SERVER['REQUEST_URI']);
+
 ?>
 
 

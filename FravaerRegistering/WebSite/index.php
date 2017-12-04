@@ -31,6 +31,19 @@ ob_start();
                 <input class="btn btn-default float-right" type="submit" value="Submit" name="login">
             </form>
     <?php
+    if($_SESSION == true)
+    {
+        ?>
+        <form method="post">
+            <input type="submit"  name="logud" value="Logud">
+        </form>
+
+
+        <?php
+    }
+
+
+
     if(isset($_REQUEST['login']))
     {
         $username = $_REQUEST['username'];
@@ -59,11 +72,28 @@ ob_start();
         $loginUser = json_decode($jsondata, true);
 
         print_r($loginUser);
-        if($loginUser == true)
+        if($loginUser["Login_Id"] != 0)
         {
-            $_SESSION["UserLoggedIn"] = $loginUser
+            $userDataRaw = file_get_contents("http://restfravaerservice.azurewebsites.net/service1.svc/Person/".$loginUser["FK_PersonId"]);
+            $decodedUserData = json_decode($userDataRaw);
+
+            $_SESSION["UserLoggedInID"] = $loginUser["FK_PersonId"];
+            $_SESSION["UserLoggedInRole"] = $decodedUserData->rolestype;
+            header("Location: ".$_SERVER['REQUEST_URI']);
         }
     }
+    if(isset($_POST['logud']))
+    {
+        print_r($_SESSION);
+        unset($_SESSION["UserLoggedInID"]);
+        unset($_SESSION["UserLoggedInRole"]);
+
+        session_destroy();
+        header("Location: ".$_SERVER['REQUEST_URI']);
+    }
+
+
+
     ?>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
