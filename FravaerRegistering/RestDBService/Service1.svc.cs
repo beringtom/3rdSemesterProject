@@ -212,7 +212,7 @@ namespace RestDBService
 
 
 
-        public decimal AddPersonToDB(string fname, string lname, string email, int roles, int studentid, int teamid)
+        public decimal AddPersonToDB(string fname, string lname, string email, int roles, string studentid, int teamid)
         {
             string CreatePersons = "INSERT INTO Person(Person_FirstName, Person_LastName, Person_Email,FK_RolesId, FK_TeamId,Person_StudentId) VALUES('"+fname+"', '"+lname+"', '"+email+"', "+roles+", "+teamid+", '"+studentid+"')";
             string identitysql = "SELECT IDENT_CURRENT('Person') as PersonId";
@@ -258,7 +258,31 @@ namespace RestDBService
             }
         }
 
-       
+        //henter alle hold
+        public IList<Team> GetTeams()
+        {
+            string selectAllTeams = "select * from Team";
+
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(selectAllTeams, databaseConnection))
+                {
+                    using (SqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                        IList<Team> teams = new List<Team>();
+                        while (reader.Read())
+                        {
+                            Team team = ReadTeam(reader);
+                            teams.Add(team);
+                        }
+                        return teams;
+                    }
+                }
+            }
+        }
+
+
 
         public Person ReadPerson(IDataRecord reader)
         {
@@ -344,8 +368,20 @@ namespace RestDBService
 
         }
 
-       
+        public Team ReadTeam(IDataReader reader)
+        {
+            int tid = reader.GetInt32(0);
+            string tname = reader.GetString(1);
+
+            Team team = new Team()
+            {
+                Team_Id = tid,
+                Team_Name = tname
+            };
+            return team;
         }
-
-
+       
     }
+
+
+}

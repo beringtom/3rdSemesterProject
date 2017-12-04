@@ -15,39 +15,57 @@
     <title>Fraværssystem - Slet bruger</title>
 </head>
 <body>
+
+<?php
+$getresturi = "http://restfravaerservice.azurewebsites.net/service1.svc/Person/";
+
+$content = file_get_contents($getresturi);
+
+$decodedContent = json_decode($content);
+//print_r($decodedContent);
+?>
+
+
 <table>
     <tr>
         <td colspan="2"><h2>Slet Bruger</h2></td>
     </tr>
-    <form action="sletbruger.php">
+    <form method="post">
         <tr>
             <td></td>
+            <td>ID:</td>
             <td>Fornavn:</td>
             <td>Efternavn:</td>
         </tr>
-        <tr>
-            <td><input type="checkbox" name="sletuser" value="1"></td>
-            <td>Tom</td>
-            <td>Bering Svensson</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" name="sletuser" value="2"></td>
-            <td>Ricco</td>
-            <td>Jørgensen</td>
-        </tr>
+<?php
+    foreach ($decodedContent as $row) {
+        echo '<tr><td><input type="checkbox" name="sletuser[]" value="'.$row->rid.'"></td><td>';
+        echo $row->studentid;
+        echo '</td><td>';
+        echo $row->firstname;
+        echo '</td><td>';
+        echo $row->lastname;
+        echo '</td></tr>';
+    }
+?>
         <tr>
             <td></td>
             <td></td>
-            <td><input type="submit" value="Submit" name="slet" style="float:right;"></td>
+            <td></td>
+            <td><input type="submit" name="submit" value="Slet valgte brugere" style="float:right;"></td>
         </tr>
     </form>
 </table>
 </body>
 </html>
+
 <?php
-include 'Funktion/sletPersonFunKtion.php';
-if(isset ($_REQUEST['slet'])) {
-    $id = $_REQUEST['sletuser'];
-    slet('http://restfravaerservice.azurewebsites.net/service1.svc/person/".$id."');
+require ('Funktion/sletPersonFunktion.php');
+if(isset ($_POST['submit'])) {
+    foreach ($_POST['sletuser'] as $rid) {
+        echo($rid);
+        slet("http://restfravaerservice.azurewebsites.net/service1.svc/person/" . $rid);
+    }
+    header("Location: ".$_SERVER['REQUEST_URI']);
 }
 ?>

@@ -22,6 +22,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -77,6 +78,7 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\RestFravaerService - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\RestFravaerService - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\RestFravaerService - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
