@@ -75,6 +75,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\RestFravaerService - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\RestFravaerService - Web Deploy %282%29.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
