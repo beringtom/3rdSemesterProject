@@ -206,7 +206,7 @@ namespace RestDBService
 
 
 
-        public decimal AddPersonToDB(string fname, string lname, string email, int roles, int studentid, int teamid)
+        public decimal AddPersonToDB(string fname, string lname, string email, int roles, string studentid, int teamid)
         {
             string CreatePersons = "INSERT INTO Person(Person_FirstName, Person_LastName, Person_Email,FK_RolesId, FK_TeamId,Person_StudentId) VALUES('"+fname+"', '"+lname+"', '"+email+"', "+roles+", "+teamid+", '"+studentid+"')";
             string identitysql = "SELECT IDENT_CURRENT('Person') as PersonId";

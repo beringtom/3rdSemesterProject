@@ -43,7 +43,7 @@ namespace RestDBService
         void AddTeam(Team t);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, UriTemplate = "Teams/")]
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json,ResponseFormat = WebMessageFormat.Json, UriTemplate = "Teams/")]
         IList<Team> GetTeams();
 
 
@@ -140,7 +140,7 @@ namespace RestDBService
          [DataMember]
          public int roles;
          [DataMember]
-         public int studentid;
+         public string studentid;
          [DataMember]
          public int teamid;
      }

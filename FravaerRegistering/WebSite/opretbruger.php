@@ -48,9 +48,10 @@ require ("Funktion/hentHoldFunktion.php")
             <td>Klasse:</td>
             <td><select name="klasse">
                     <option value="0">-- None --</option>
-                    <?php foreach (getTeams() as $tid) {
-                        echo "<option value=".$tid["Team_id"].">".$tid["Team_name"]."</option>";
-                        slet("http://restfravaerservice.azurewebsites.net/service1.svc/team/");
+                    <?php
+                    $data[] = getTeams();
+                    foreach ($data[0] as $tid) {
+                        echo "<option value=".$tid->Team_Id.">".$tid->Team_Name."</option>";
                     } ?>
                 </select>
             </td>
@@ -79,7 +80,6 @@ require ("Funktion/hentHoldFunktion.php")
 <?php
 if(isset($_POST['submit']))
 {
-
     $fname = $_POST['firstname'];
     $lname = $_POST['lastname'];
     $email = $_POST['email'];

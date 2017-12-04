@@ -1,6 +1,7 @@
 <?php
 session_start();
 ob_start();
+require("Funktion/hentHoldFunktion.php")
 ?>
 
 <!DOCTYPE html>
@@ -29,35 +30,49 @@ print_r($_SERVER['REQUEST_URI']);
     <form method="post">
         <tr>
             <td>Fornavn:</td>
-            <td><input type="text" name="firstname" value="<?php echo $decodedContent[0]->firstname ?>"></td>
+            <td><input type="text" name="firstname" value="<?php echo $decodedContent->firstname ?>"></td>
         </tr>
         <tr>
             <td>Efternavn:</td>
-            <td><input type="text" name="lastname" value="<?php echo $decodedContent[0]->lastname ?>"></td>
+            <td><input type="text" name="lastname" value="<?php echo $decodedContent->lastname ?>"></td>
         </tr>
         <tr>
             <td>Email:</td>
-            <td><input type="text" name="email" value="<?php echo $decodedContent[0]->email ?>"></td>
+            <td><input type="text" name="email" value="<?php echo $decodedContent->email ?>"></td>
         </tr>
         <tr>
             <td>Brugernavn:</td>
-            <td><input type="text" name="username" value="<?php echo $decodedContent[0]->username ?>"></td>
+            <td><input type="text" name="username" value="<?php echo $decodedContent->username ?>"></td>
         </tr>
         <tr>
             <td>Password:</td>
-            <td><input type="text" name="password" value="<?php echo $decodedContent[0]->password ?>"></td>
+            <td><input type="text" name="password" value="<?php echo $decodedContent->password ?>"></td>
         </tr>
         <tr>
             <td>Student ID:</td>
-            <td><input type="text" name="studentid" value="<?php echo $decodedContent[0]->studentid ?>"></td>
+            <td><input type="text" name="studentid" value="<?php echo $decodedContent->studentid ?>"></td>
+        </tr>
+        <tr>
+            <td>Klasse:</td>
+            <td><select name="klasse">
+                    <option value="0">-- None --</option>
+                    <?php
+                    $teamdata[] = getTeams();
+                    foreach ($teamdata[0] as $tid) {
+                        echo "<option value=".$tid->Team_Id;
+                        if($tid->Team_Id == $decodedContent->fkteamid){echo(" selected ");}
+                        echo ">".$tid->Team_Name."</option>";
+                    } ?>
+                </select>
+            </td>
         </tr>
         <tr>
             <td>Rolle:</td>
             <td><select name="rolle">
-                    <option<?php if($decodedContent[0]->fkrolesid == 0){ echo " selected ";} ?> value="0">--None--</option>
-                    <option<?php if($decodedContent[0]->fkrolesid == 1){ echo " selected ";} ?> value="1">Studerende</option>
-                    <option<?php if($decodedContent[0]->fkrolesid == 2){ echo " selected ";} ?> value="2">Underviser</option>
-                    <option<?php if($decodedContent[0]->fkrolesid == 3){ echo " selected ";} ?> value="3">Uddannelses Leder</option>
+                    <option<?php if($decodedContent->fkrolesid == 0){ echo " selected ";} ?> value="0">--None--</option>
+                    <option<?php if($decodedContent->fkrolesid == 1){ echo " selected ";} ?> value="1">Studerende</option>
+                    <option<?php if($decodedContent->fkrolesid == 2){ echo " selected ";} ?> value="2">Underviser</option>
+                    <option<?php if($decodedContent->fkrolesid == 3){ echo " selected ";} ?> value="3">Uddannelses Leder</option>
                 </select>
             </td>
         </tr>
@@ -78,7 +93,7 @@ if(isset($_POST['submit']))
     $passw = $_POST['password'];
     $rolle = $_POST['rolle'];
     $studentid = $_POST['studentid'];
-    $teamid = 1;
+    $teamid = $_POST['klasse'];
 
     $data = array("fname" => $fname, "lname" => $lname, "email" => $email, "username" => $username, "password" => $passw, "roles" => $rolle, "studentid" => $studentid, "teamid" => $teamid);
     $json_string = json_encode($data);
@@ -103,7 +118,7 @@ if(isset($_POST['submit']))
     $newuser = json_decode($jsondata, true);
 
 
-    header("Location: ".$_SERVER['REQUEST_URI']);
+    //header("Location: ".$_SERVER['REQUEST_URI']);
 
 }
 ?>

@@ -8,9 +8,9 @@
 
 function getTeams()
 {
-    $getresturi = "http://restfravaerservice.azurewebsites.net/service1.svc/team/";
-    $content = file_get_contents($getresturi);
-    $decodedContent = json_decode($content);
-    return $decodedContent;
+    $getteamsuri = "http://restfravaerservice.azurewebsites.net/service1.svc/teams/";
+    $teamcontent = file_get_contents($getteamsuri);
+    $decodedTeamContent = json_decode($teamcontent);
+    return $decodedTeamContent;
     print_r($_SERVER['REQUEST_URI']);
 }
