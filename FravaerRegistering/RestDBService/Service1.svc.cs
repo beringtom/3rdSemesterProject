@@ -42,7 +42,7 @@ namespace RestDBService
             }
         }
         //henter en person
-        public IList<AllPersonData> GetOnePersons(string id)
+        public AllPersonData GetOnePersons(string id)
         {
             int idInt = int.Parse(id);
 
@@ -55,21 +55,19 @@ namespace RestDBService
                 {
                     using (SqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        List<AllPersonData> studentList = new List<AllPersonData>();
+                        AllPersonData student = new AllPersonData();
                         while (reader.Read())
                         {
-                            AllPersonData student = ReadAllPersonData(reader);
-                            studentList.Add(student);
+                            student = ReadAllPersonData(reader);
                         }
-                        return studentList;
+                        return student;
                     }
                 }
             }
         }
         //tjekker på om felterne i login tabelen er enes med user input
-        public IList<Login> Getlogin(Login loginUserPaswords)
+        public Login Getlogin(Login loginUserPaswords)
         {
-           
 
             string selectlogin = "select* from login where Login_UserName = '"+loginUserPaswords.Login_UserName+"' and Login_Password = '"+loginUserPaswords.Login_Password+"'";
  
@@ -80,14 +78,13 @@ namespace RestDBService
                 {
                     using (SqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        List<Login> LoginList = new List<Login>();
+                        Login returnLogin = new Login();
                         while (reader.Read())
                         {
-                            Login login = ReadLogin(reader);
-                            LoginList.Add(login);
+                            returnLogin = ReadLogin(reader);
                             
                         }
-                        return LoginList;
+                        return returnLogin;
                     }
                 }
             }

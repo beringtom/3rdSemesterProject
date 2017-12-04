@@ -18,11 +18,11 @@ namespace RestDBService
 
         [OperationContract]
         [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, UriTemplate = "Person/{id}")]
-        IList<AllPersonData> GetOnePersons(string id);
+        AllPersonData GetOnePersons(string id);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Login/")]
-        IList<Login> Getlogin(Login loginUserPaswords);
+        Login Getlogin(Login loginUserPaswords);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Person/")]
