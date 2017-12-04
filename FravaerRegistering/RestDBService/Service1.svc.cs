@@ -106,6 +106,12 @@ namespace RestDBService
             }
         }
 
+        public string SensorCheck(SonsorData s)
+        {
+
+            return null;
+        }
+
         public int DeletePerson(string personID)
         {
             string deletecommand = $"DELETE FROM Person WHERE Person_Id = {personID}";
