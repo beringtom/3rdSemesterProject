@@ -42,6 +42,11 @@ namespace RestDBService
             UriTemplate = "Team/")]
         void AddTeam(Team t);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, UriTemplate = "Teams/")]
+        IList<Team> GetTeams();
+
+
         //[OperationContract]
         //Person ReadPerson(IDataRecord reader);
     }

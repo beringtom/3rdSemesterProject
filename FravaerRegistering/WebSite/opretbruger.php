@@ -5,7 +5,7 @@
  * Date: 28-11-2017
  * Time: 09:54
  */
-
+require ("Funktion/hentHoldFunktion.php")
 ?>
 
 <!DOCTYPE html>
@@ -45,8 +45,20 @@
             <td><input type="text" name="studentid" placeholder="eg. 48484848"></td>
         </tr>
         <tr>
+            <td>Klasse:</td>
+            <td><select name="klasse">
+                    <option value="0">-- None --</option>
+                    <?php foreach (getTeams() as $tid) {
+                        echo "<option value=".$tid["Team_id"].">".$tid["Team_name"]."</option>";
+                        slet("http://restfravaerservice.azurewebsites.net/service1.svc/team/");
+                    } ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
             <td>Rolle:</td>
             <td><select name="rolle">
+                    <option value="0">-- None --</option>
                     <option value="1">Studerende</option>
                     <option value="2">Underviser</option>
                     <option value="3">Uddannelses Leder</option>
@@ -75,12 +87,12 @@ if(isset($_POST['submit']))
     $passw = $_POST['password'];
     $rolle = $_POST['rolle'];
     $studentid = $_POST['studentid'];
-    $teamid = 1;
+    $teamid = $_POST['klasse'];
 
     $data = array("fname" => $fname, "lname" => $lname, "email" => $email, "username" => $username, "password" => $passw, "roles" => $rolle, "studentid" => $studentid, "teamid" => $teamid);
     $json_string = json_encode($data);
 
-    print_r($json_string);
+    //print_r($json_string);
     $uri = "http://restfravaerservice.azurewebsites.net/service1.svc/Person/";
     $ch = curl_init($uri);
 
