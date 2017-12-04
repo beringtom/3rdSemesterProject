@@ -5,7 +5,8 @@
  * Date: 28-11-2017
  * Time: 09:54
  */
-
+session_start();
+ob_start();
 ?>
 
 <!DOCTYPE html>
@@ -35,11 +36,11 @@
         $username = $_REQUEST['username'];
         $password = $_REQUEST['password'];
 
-        $data = array("username" => $username, "password" => $password);
+        $data = array("Login_UserName" => $username, "Login_Password" => $password);
         $json_string = json_encode($data);
 
 
-        $uri = "http://restfravaerservice.azurewebsites.net/service1.svc/lLogin/";
+        $uri = "http://restfravaerservice.azurewebsites.net/service1.svc/Login/";
         $ch = curl_init($uri);
 
 
@@ -56,9 +57,11 @@
 
         $jsondata = curl_exec($ch);
         $loginUser = json_decode($jsondata, true);
-        if($loginUser = true)
+
+        print_r($loginUser);
+        if($loginUser == true)
         {
-            echo "du er loget ind";
+            $_SESSION["UserLoggedIn"] = $loginUser
         }
     }
     ?>

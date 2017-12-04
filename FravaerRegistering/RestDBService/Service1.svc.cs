@@ -67,7 +67,7 @@ namespace RestDBService
             }
         }
         //tjekker på om felterne i login tabelen er enes med user input
-        public IList<Login> Getlogin(Login loginUserPaswords)
+        public Login Getlogin(Login loginUserPaswords)
         {
            
 
@@ -80,14 +80,13 @@ namespace RestDBService
                 {
                     using (SqlDataReader reader = selectCommand.ExecuteReader())
                     {
-                        List<Login> LoginList = new List<Login>();
+                        Login returnLogin = new Login();
                         while (reader.Read())
                         {
-                            Login login = ReadLogin(reader);
-                            LoginList.Add(login);
+                            returnLogin = ReadLogin(reader);
                             
                         }
-                        return LoginList;
+                        return returnLogin;
                     }
                 }
             }
