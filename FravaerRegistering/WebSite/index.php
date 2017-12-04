@@ -27,8 +27,41 @@
                 <label for="pass" class="form-group col-5">Password</label>
                 <input class="form-control col-7 float-right" id="pass" type="password" name="password" placeholder="password">
 
-                <input class="btn btn-default float-right" type="submit" value="Submit">
+                <input class="btn btn-default float-right" type="submit" value="Submit" name="login">
             </form>
+    <?php
+    if(isset($_REQUEST['login']))
+    {
+        $username = $_REQUEST['username'];
+        $password = $_REQUEST['password'];
+
+        $data = array("username" => $username, "password" => $password);
+        $json_string = json_encode($data);
+
+
+        $uri = "http://restfravaerservice.azurewebsites.net/service1.svc/lLogin/";
+        $ch = curl_init($uri);
+
+
+// curl is good for more complex operations than just plain GET
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// TRUE to return the transfer as a string of the return value of curl_exec() instead of outputting it directly.
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($json_string))
+        );
+
+
+        $jsondata = curl_exec($ch);
+        $loginUser = json_decode($jsondata, true);
+        if($loginUser = true)
+        {
+            echo "du er loget ind";
+        }
+    }
+    ?>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
