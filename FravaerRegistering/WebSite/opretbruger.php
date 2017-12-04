@@ -19,7 +19,7 @@
     <tr>
         <td colspan="2"><h2>Opret Bruger</h2></td>
     </tr>
-    <form action="#" method="post">
+    <form method="post">
         <tr>
             <td>Fornavn:</td>
             <td><input type="text" name="firstname" placeholder="First Name"></td>

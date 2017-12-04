@@ -6,7 +6,7 @@
 </head>
 <body>
     <table>
-        <form action="oprethold.php">
+        <form method="post">
             <tr>
                 <td>Hold navn:</td>
                 <td><input type="text" name="holdnavn" placeholder="Holdnavn"></td>
