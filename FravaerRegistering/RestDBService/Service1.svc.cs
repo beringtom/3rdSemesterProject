@@ -176,6 +176,7 @@ namespace RestDBService
         }
         private Person GetPersonByStudentId(string cardid, SqlConnection databaseConnection)
         {
+            //TODO: KAN IKKE HENTE PGA ReadPerson(reader) ( SQL SÆTNING HAR IKKE TEAM OG ROLLE..OSV)
             string FindPerson = "SELECT * FROM Person WHERE Person_StudentId = @cardid";
             using (SqlCommand SelectPersonCommand = new SqlCommand(FindPerson, databaseConnection))
             {
