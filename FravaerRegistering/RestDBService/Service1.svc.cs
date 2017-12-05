@@ -132,6 +132,7 @@ namespace RestDBService
                 if (TimeReg.Count == 0)
                 {
                     AddTimeRegToDB(s.Time, localRoom.Room_Id, localPerson.Person_Id, databaseConnection);
+                    return "CHECKIN";
                 }
                 else
                 {
@@ -140,16 +141,17 @@ namespace RestDBService
                         if (treg.TimeRegistration_CheckOut == null)
                         {
                             UpdateTimeRegInDB(treg.TimeRegistration_Id, s.Time, databaseConnection);
+                            return "CHECKOUT";
                         }
                         else if (treg.TimeRegistration_CheckOut != null)
                         {
                             AddTimeRegToDB(s.Time, localRoom.Room_Id, localPerson.Person_Id, databaseConnection);
+                            return "CHECKIN";
                         }
                     }
                 }
-
             }
-            return null;
+            return "ERROR";
         }
 
         #region TimeRegistrationDBStuff
