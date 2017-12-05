@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace CardRelay
 {
@@ -30,12 +33,18 @@ namespace CardRelay
                     string DecodedData = Encoding.ASCII.GetString(reciveData);
                     Console.WriteLine(DecodedData);
 
+                    string[] SplitDecodedData = DecodedData.Split('/');
+                    string Url = "restfravaerservice.azurewebsites.net/service1.svc/Sensor/";
 
-                    string SensorUrl = "";
+                    
+
+                    SensorData sdata = new SensorData(SplitDecodedData[1], DateTime.Parse(SplitDecodedData[2]), SplitDecodedData[3]);
+                    string response = AddSensordata(sdata ,Url).Result;
+
 
 
                     UdpClient Sender = new UdpClient(remote.Address.ToString(), ipout);
-                    byte[] send = Encoding.ASCII.GetBytes("CARD/" + "CHECKIN/" + DecodedData.Split('/')[2]);
+                    byte[] send = Encoding.ASCII.GetBytes("CARD/" + response + "/" + SplitDecodedData[3]);
                     Sender.Send(send, send.Length);
 
                 }
@@ -43,6 +52,27 @@ namespace CardRelay
                 {
                     Console.WriteLine(e.ToString());
                 }
+            }
+
+            
+        }
+
+
+
+
+        private static async Task<string> AddSensordata(object s, string uri)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var jsonString = JsonConvert.SerializeObject(s);
+                StringContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+
+                HttpResponseMessage response = await client.PostAsync(uri, content);
+                response.EnsureSuccessStatusCode();
+                string str = await response.Content.ReadAsStringAsync();
+                string returnString = JsonConvert.DeserializeObject<string>(str);
+                return returnString;
             }
         }
     }
