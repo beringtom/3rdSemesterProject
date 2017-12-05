@@ -30,6 +30,8 @@ namespace CardRelay
                     string DecodedData = Encoding.ASCII.GetString(reciveData);
                     Console.WriteLine(DecodedData);
                     
+                    
+
 
 
                     UdpClient Sender = new UdpClient(remote.Address.ToString(), ipout);

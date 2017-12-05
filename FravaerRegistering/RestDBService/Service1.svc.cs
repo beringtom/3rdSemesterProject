@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
@@ -108,9 +110,129 @@ namespace RestDBService
 
         public string SensorCheck(SonsorData s)
         {
+            Person localPerson = new Person();
+            Room localRoom = new Room();
 
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+
+                //Henter Person der Bipede
+                localPerson = GetPersonByStudentId(s.CardID, databaseConnection);
+
+                //Hener Lokalet
+                localRoom = GetRoomByName(s.Room, databaseConnection);
+
+                //Henter alle timereg for person
+                List<TimeRegistration> TimeReg = new List<TimeRegistration>();
+                TimeReg = GetAllTimeRegForPerson(localPerson.Person_Id, databaseConnection);
+
+
+                //TimeChecker
+                if (TimeReg.Count == 0)
+                {
+                    AddTimeRegToDB(s.Time, localRoom.Room_Id, localPerson.Person_Id, databaseConnection);
+                }
+                else
+                {
+                    foreach (TimeRegistration treg in TimeReg)
+                    {
+                        if (treg.TimeRegistration_CheckOut == null)
+                        {
+                            UpdateTimeRegInDB(treg.TimeRegistration_Id, s.Time, databaseConnection);
+                        }
+                        else if (treg.TimeRegistration_CheckOut != null)
+                        {
+                            AddTimeRegToDB(s.Time, localRoom.Room_Id, localPerson.Person_Id, databaseConnection);
+                        }
+                    }
+                }
+
+            }
             return null;
         }
+
+        #region TimeRegistrationDBStuff
+
+        private List<TimeRegistration> GetAllTimeRegForPerson(int personid, SqlConnection databaseConnection)
+        {
+            string FindTimeReg = "SELECT * FROM TimeRegistration WHERE FK_RegPersonId = @regperid";
+            using (SqlCommand SelectTimeRegCommand = new SqlCommand(FindTimeReg, databaseConnection))
+            {
+                SelectTimeRegCommand.Parameters.AddWithValue("@regperid", personid);
+                using (SqlDataReader reader = SelectTimeRegCommand.ExecuteReader())
+                {
+                    List<TimeRegistration> returnlist = new List<TimeRegistration>();
+                    while (reader.Read())
+                    {
+                        TimeRegistration t = ReadTimeReg(reader);
+                        returnlist.Add(t);
+                    }
+                    return returnlist;
+                }
+            }
+        }
+        private Person GetPersonByStudentId(string cardid, SqlConnection databaseConnection)
+        {
+            string FindPerson = "SELECT * FROM Person WHERE Person_StudieId = @cardid";
+            using (SqlCommand SelectPersonCommand = new SqlCommand(FindPerson, databaseConnection))
+            {
+                SelectPersonCommand.Parameters.AddWithValue("@cardid", cardid);
+                using (SqlDataReader reader = SelectPersonCommand.ExecuteReader())
+                {
+                    Person p = new Person();
+                    while (reader.Read())
+                    {
+                        p = ReadPerson(reader);
+                    }   
+                    return p;
+                }
+            }
+        }
+
+        private Room GetRoomByName(string roomname, SqlConnection databaseConnection)
+        {
+            string FindRoom = "SELECT * FROM Room WHERE Room_Name = @rname";
+            using (SqlCommand SelectRommCommand = new SqlCommand(FindRoom, databaseConnection))
+            {
+                SelectRommCommand.Parameters.AddWithValue("@rname", roomname);
+                using (SqlDataReader reader = SelectRommCommand.ExecuteReader())
+                {
+                    Room r = new Room();
+                    while (reader.Read())
+                    {
+                        r = ReadRoom(reader);
+                    }
+                    return r;
+                }
+            }
+        }
+        private void UpdateTimeRegInDB(int regid, DateTime t, SqlConnection databaseConnection)
+        {
+            string updateTimeRegData = "UPDATE TimeRegistration PUT TimeRegistration_CheckOut = @timeout WHERE TimeRegistration_Id = @regid";
+            
+            using (SqlCommand updateTimeRegCommand = new SqlCommand(updateTimeRegData, databaseConnection))
+            {
+                updateTimeRegCommand.Parameters.AddWithValue("@timeout", t);
+                updateTimeRegCommand.Parameters.AddWithValue("@regid", regid);
+                updateTimeRegCommand.ExecuteNonQuery();
+            }        }
+
+        private void AddTimeRegToDB(DateTime d, int rid, int pid, SqlConnection databaseConnection)
+        {
+            string insertTimeRegData = "INSERT INTO TimeRegistration(TimeRegistration_CheckIn, FK_RoomId, FK_RegPersonId) VALUES(@timein, @roomid, @personid)";
+
+            using (SqlCommand insertTimeRegCommand = new SqlCommand())
+            {
+                insertTimeRegCommand.Parameters.AddWithValue("@timein", d);
+                insertTimeRegCommand.Parameters.AddWithValue("@roomid", rid);
+                insertTimeRegCommand.Parameters.AddWithValue("@personid", pid);
+                insertTimeRegCommand.ExecuteNonQuery();
+            }
+            
+        }
+
+        #endregion
 
         public int DeletePerson(string personID)
         {
@@ -368,6 +490,19 @@ namespace RestDBService
 
         }
 
+        public Room ReadRoom(IDataReader reader)
+        {
+            int roomid = reader.GetInt32(0);
+            string roomname = reader.GetString(1);
+
+            Room room = new Room()
+            {
+                Room_Id = roomid,
+                Room_Name = roomname
+            };
+            return room;
+        }
+
         public Team ReadTeam(IDataReader reader)
         {
             int tid = reader.GetInt32(0);
@@ -380,7 +515,27 @@ namespace RestDBService
             };
             return team;
         }
-       
+
+        public TimeRegistration ReadTimeReg(IDataReader reader)
+        {
+            int regid = reader.GetInt32(0);
+            DateTime cin = reader.GetDateTime(1);
+            DateTime cout = reader.GetDateTime(2);
+            int fkrid = reader.GetInt32(3);
+            int fkpid = reader.GetInt32(4);
+
+            TimeRegistration timeRegistration = new TimeRegistration()
+            {
+                TimeRegistration_Id = regid,
+                TimeRegistration_CheckIn = cin,
+                TimeRegistration_CheckOut = cout,
+                FK_RoomId = fkrid,
+                FK_RegPersonId = fkpid
+            };
+            return timeRegistration;
+        }
+
+
     }
 
 

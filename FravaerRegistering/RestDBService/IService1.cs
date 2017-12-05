@@ -112,6 +112,10 @@ namespace RestDBService
         public DateTime TimeRegistration_CheckIn;
         [DataMember]
         public DateTime TimeRegistration_CheckOut;
+        [DataMember]
+        public int FK_RoomId;
+        [DataMember]
+        public int FK_RegPersonId;
     }
 
     public class Room
@@ -188,11 +192,11 @@ public class AllPersonData
     public class SonsorData
     {
         [DataMember]
-        public string Lokale;
+        public string Room;
         [DataMember]
-        public DateTime Tid;
+        public DateTime Time;
         [DataMember]
-        public int KortID;
+        public string CardID;
 
     }
     
