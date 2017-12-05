@@ -42,8 +42,18 @@ namespace RestDBService
             UriTemplate = "Team/")]
         void AddTeam(Team t);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json,ResponseFormat = WebMessageFormat.Json, UriTemplate = "Teams/")]
+        IList<Team> GetTeams();
+
+
         //[OperationContract]
         //Person ReadPerson(IDataRecord reader);
+        [OperationContract]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+             UriTemplate = "Sensor/")]
+        string SensorCheck(SonsorData s);
+
     }
 
 
@@ -135,7 +145,7 @@ namespace RestDBService
          [DataMember]
          public int roles;
          [DataMember]
-         public int studentid;
+         public string studentid;
          [DataMember]
          public int teamid;
      }
@@ -175,6 +185,16 @@ public class AllPersonData
         public int fkpersonid;
     }
 
+    public class SonsorData
+    {
+        [DataMember]
+        public string Lokale;
+        [DataMember]
+        public DateTime Tid;
+        [DataMember]
+        public int KortID;
+
+    }
     
 
     // Schedule bliver sandsynligvis slettet igen, hvis den er unødvendig.

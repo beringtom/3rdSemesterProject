@@ -52,7 +52,7 @@ $decodedContent = json_decode($content);
             <td></td>
             <td></td>
             <td></td>
-            <td><input type="submit" name="submit" value="Submit" style="float:right;"></td>
+            <td><input type="submit" name="submit" value="Slet valgte brugere" style="float:right;"></td>
         </tr>
     </form>
 </table>
