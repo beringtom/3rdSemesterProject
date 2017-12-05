@@ -176,7 +176,7 @@ namespace RestDBService
         }
         private Person GetPersonByStudentId(string cardid, SqlConnection databaseConnection)
         {
-            string FindPerson = "SELECT * FROM Person WHERE Person_StudieId = @cardid";
+            string FindPerson = "SELECT * FROM Person WHERE Person_StudentId = @cardid";
             using (SqlCommand SelectPersonCommand = new SqlCommand(FindPerson, databaseConnection))
             {
                 SelectPersonCommand.Parameters.AddWithValue("@cardid", cardid);
