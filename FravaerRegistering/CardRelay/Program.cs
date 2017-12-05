@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -34,11 +35,11 @@ namespace CardRelay
                     Console.WriteLine(DecodedData);
 
                     string[] SplitDecodedData = DecodedData.Split('/');
-                    string Url = "restfravaerservice.azurewebsites.net/service1.svc/Sensor/";
+                    string Url = "http://restfravaerservice.azurewebsites.net/service1.svc/Sensor/";
 
                     
 
-                    SensorData sdata = new SensorData(SplitDecodedData[1], DateTime.Parse(SplitDecodedData[2]), SplitDecodedData[3]);
+                    SensorData sdata = new SensorData(SplitDecodedData[1], SplitDecodedData[2], SplitDecodedData[3]);
                     string response = AddSensordata(sdata ,Url).Result;
 
 
@@ -64,6 +65,7 @@ namespace CardRelay
         {
             using (HttpClient client = new HttpClient())
             {
+
                 var jsonString = JsonConvert.SerializeObject(s);
                 StringContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 

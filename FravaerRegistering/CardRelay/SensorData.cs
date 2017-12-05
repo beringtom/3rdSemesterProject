@@ -9,10 +9,10 @@ namespace CardRelay
     class SensorData
     {
         public string Room;
-        public DateTime Time;
+        public string Time;
         public string CardID;
 
-        public SensorData(string room, DateTime time, string cardId)
+        public SensorData(string room, string time, string cardId)
         {
             Room = room;
             Time = time;
