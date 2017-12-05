@@ -15,6 +15,7 @@ require ("Funktion/hentHoldFunktion.php")
     <title>Fraværssystem - Opret Bruger</title>
 </head>
 <body>
+<?php include ("menu.php") ?>
 <table>
     <tr>
         <td colspan="2"><h2>Opret Bruger</h2></td>

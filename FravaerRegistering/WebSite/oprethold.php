@@ -5,6 +5,7 @@
     <title>Opret - Klasse</title>
 </head>
 <body>
+<?php include ("menu.php") ?>
     <table>
         <form method="post">
             <tr>
