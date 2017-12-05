@@ -18,11 +18,11 @@ namespace RestDBService
 
         [OperationContract]
         [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, UriTemplate = "Person/{id}")]
-        IList<AllPersonData> GetOnePersons(string id);
+        AllPersonData GetOnePersons(string id);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Login/")]
-        IList<Login> Getlogin(Login loginUserPaswords);
+        Login Getlogin(Login loginUserPaswords);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Person/")]
@@ -37,9 +37,23 @@ namespace RestDBService
         [WebInvoke(Method = "DELETE", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Person/{id}")]
         int DeletePerson(string id);
 
+        [OperationContract]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Team/")]
+        void AddTeam(Team t);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json,ResponseFormat = WebMessageFormat.Json, UriTemplate = "Teams/")]
+        IList<Team> GetTeams();
+
 
         //[OperationContract]
         //Person ReadPerson(IDataRecord reader);
+        [OperationContract]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+             UriTemplate = "Sensor/")]
+        string SensorCheck(SonsorData s);
+
     }
 
 
@@ -98,6 +112,10 @@ namespace RestDBService
         public DateTime TimeRegistration_CheckIn;
         [DataMember]
         public DateTime TimeRegistration_CheckOut;
+        [DataMember]
+        public int FK_RoomId;
+        [DataMember]
+        public int FK_RegPersonId;
     }
 
     public class Room
@@ -131,7 +149,7 @@ namespace RestDBService
          [DataMember]
          public int roles;
          [DataMember]
-         public int studentid;
+         public string studentid;
          [DataMember]
          public int teamid;
      }
@@ -171,6 +189,16 @@ public class AllPersonData
         public int fkpersonid;
     }
 
+    public class SonsorData
+    {
+        [DataMember]
+        public string Room;
+        [DataMember]
+        public DateTime Time;
+        [DataMember]
+        public string CardID;
+
+    }
     
 
     // Schedule bliver sandsynligvis slettet igen, hvis den er unødvendig.

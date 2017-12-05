@@ -5,7 +5,8 @@
  * Date: 28-11-2017
  * Time: 09:54
  */
-
+session_start();
+ob_start();
 ?>
 
 <!DOCTYPE html>
@@ -30,16 +31,29 @@
                 <input class="btn btn-default float-right" type="submit" value="Submit" name="login">
             </form>
     <?php
+    if($_SESSION == true)
+    {
+        ?>
+        <form method="post">
+            <input type="submit"  name="logud" value="Logud">
+        </form>
+
+
+        <?php
+    }
+
+
+
     if(isset($_REQUEST['login']))
     {
         $username = $_REQUEST['username'];
         $password = $_REQUEST['password'];
 
-        $data = array("username" => $username, "password" => $password);
+        $data = array("Login_UserName" => $username, "Login_Password" => $password);
         $json_string = json_encode($data);
 
 
-        $uri = "http://restfravaerservice.azurewebsites.net/service1.svc/lLogin/";
+        $uri = "http://restfravaerservice.azurewebsites.net/service1.svc/Login/";
         $ch = curl_init($uri);
 
 
@@ -56,11 +70,30 @@
 
         $jsondata = curl_exec($ch);
         $loginUser = json_decode($jsondata, true);
-        if($loginUser = true)
+
+        print_r($loginUser);
+        if($loginUser["Login_Id"] != 0)
         {
-            echo "du er loget ind";
+            $userDataRaw = file_get_contents("http://restfravaerservice.azurewebsites.net/service1.svc/Person/".$loginUser["FK_PersonId"]);
+            $decodedUserData = json_decode($userDataRaw);
+
+            $_SESSION["UserLoggedInID"] = $loginUser["FK_PersonId"];
+            $_SESSION["UserLoggedInRole"] = $decodedUserData->rolestype;
+            header("Location: ".$_SERVER['REQUEST_URI']);
         }
     }
+    if(isset($_POST['logud']))
+    {
+        print_r($_SESSION);
+        unset($_SESSION["UserLoggedInID"]);
+        unset($_SESSION["UserLoggedInRole"]);
+
+        session_destroy();
+        header("Location: ".$_SERVER['REQUEST_URI']);
+    }
+
+
+
     ?>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>

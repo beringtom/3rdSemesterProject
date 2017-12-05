@@ -29,7 +29,9 @@ namespace CardRelay
                     byte[] reciveData = Reciver.Receive(ref remote);
                     string DecodedData = Encoding.ASCII.GetString(reciveData);
                     Console.WriteLine(DecodedData);
-                    
+
+
+                    string SensorUrl = "";
 
 
                     UdpClient Sender = new UdpClient(remote.Address.ToString(), ipout);

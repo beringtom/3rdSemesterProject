@@ -5,7 +5,7 @@
  * Date: 28-11-2017
  * Time: 09:54
  */
-
+require ("Funktion/hentHoldFunktion.php")
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +19,7 @@
     <tr>
         <td colspan="2"><h2>Opret Bruger</h2></td>
     </tr>
-    <form action="#" method="post">
+    <form method="post">
         <tr>
             <td>Fornavn:</td>
             <td><input type="text" name="firstname" placeholder="First Name"></td>
@@ -45,9 +45,21 @@
             <td><input type="text" name="studentid" placeholder="eg. 48484848"></td>
         </tr>
         <tr>
+            <td>Klasse:</td>
+            <td><select name="klasse">
+                    <option value="0">-- None --</option>
+                    <?php
+                    $data[] = getTeams();
+                    foreach ($data[0] as $tid) {
+                        echo "<option value=".$tid->Team_Id.">".$tid->Team_Name."</option>";
+                    } ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
             <td>Rolle:</td>
             <td><select name="rolle">
-                    <option value="0">--None--</option>
+                    <option value="0">-- None --</option>
                     <option value="1">Studerende</option>
                     <option value="2">Underviser</option>
                     <option value="3">Uddannelses Leder</option>
@@ -68,7 +80,6 @@
 <?php
 if(isset($_POST['submit']))
 {
-
     $fname = $_POST['firstname'];
     $lname = $_POST['lastname'];
     $email = $_POST['email'];
@@ -76,12 +87,12 @@ if(isset($_POST['submit']))
     $passw = $_POST['password'];
     $rolle = $_POST['rolle'];
     $studentid = $_POST['studentid'];
-    $teamid = 0;
+    $teamid = $_POST['klasse'];
 
     $data = array("fname" => $fname, "lname" => $lname, "email" => $email, "username" => $username, "password" => $passw, "roles" => $rolle, "studentid" => $studentid, "teamid" => $teamid);
     $json_string = json_encode($data);
 
-
+    //print_r($json_string);
     $uri = "http://restfravaerservice.azurewebsites.net/service1.svc/Person/";
     $ch = curl_init($uri);
 
