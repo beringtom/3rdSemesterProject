@@ -194,7 +194,7 @@ public class AllPersonData
         [DataMember]
         public string Room;
         [DataMember]
-        public DateTime Time;
+        public string Time;
         [DataMember]
         public string CardID;
 

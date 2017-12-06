@@ -18,7 +18,9 @@ $getresturi = "http://restfravaerservice.azurewebsites.net/service1.svc/Person/"
 $content = file_get_contents($getresturi);
 
 $decodedContent = json_decode($content);
-print_r($_SERVER['REQUEST_URI']);
+//print_r($_SERVER['REQUEST_URI']);
+
+include ("menu.php")
 
 ?>
 

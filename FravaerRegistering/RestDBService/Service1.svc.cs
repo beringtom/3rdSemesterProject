@@ -176,7 +176,8 @@ namespace RestDBService
         }
         private Person GetPersonByStudentId(string cardid, SqlConnection databaseConnection)
         {
-            string FindPerson = "SELECT * FROM Person WHERE Person_StudieId = @cardid";
+            //TODO: KAN IKKE HENTE PGA ReadPerson(reader) ( SQL SÆTNING HAR IKKE TEAM OG ROLLE..OSV)
+            string FindPerson = "SELECT * FROM Person WHERE Person_StudentId = @cardid";
             using (SqlCommand SelectPersonCommand = new SqlCommand(FindPerson, databaseConnection))
             {
                 SelectPersonCommand.Parameters.AddWithValue("@cardid", cardid);
@@ -209,24 +210,24 @@ namespace RestDBService
                 }
             }
         }
-        private void UpdateTimeRegInDB(int regid, DateTime t, SqlConnection databaseConnection)
+        private void UpdateTimeRegInDB(int regid, string datentime, SqlConnection databaseConnection)
         {
             string updateTimeRegData = "UPDATE TimeRegistration PUT TimeRegistration_CheckOut = @timeout WHERE TimeRegistration_Id = @regid";
             
             using (SqlCommand updateTimeRegCommand = new SqlCommand(updateTimeRegData, databaseConnection))
             {
-                updateTimeRegCommand.Parameters.AddWithValue("@timeout", t);
+                updateTimeRegCommand.Parameters.AddWithValue("@timeout", datentime);
                 updateTimeRegCommand.Parameters.AddWithValue("@regid", regid);
                 updateTimeRegCommand.ExecuteNonQuery();
             }        }
 
-        private void AddTimeRegToDB(DateTime d, int rid, int pid, SqlConnection databaseConnection)
+        private void AddTimeRegToDB(string datentime, int rid, int pid, SqlConnection databaseConnection)
         {
             string insertTimeRegData = "INSERT INTO TimeRegistration(TimeRegistration_CheckIn, FK_RoomId, FK_RegPersonId) VALUES(@timein, @roomid, @personid)";
 
             using (SqlCommand insertTimeRegCommand = new SqlCommand())
             {
-                insertTimeRegCommand.Parameters.AddWithValue("@timein", d);
+                insertTimeRegCommand.Parameters.AddWithValue("@timein", datentime);
                 insertTimeRegCommand.Parameters.AddWithValue("@roomid", rid);
                 insertTimeRegCommand.Parameters.AddWithValue("@personid", pid);
                 insertTimeRegCommand.ExecuteNonQuery();

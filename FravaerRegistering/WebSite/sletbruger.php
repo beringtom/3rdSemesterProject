@@ -25,6 +25,7 @@ $decodedContent = json_decode($content);
 //print_r($decodedContent);
 ?>
 
+<?php include ("menu.php") ?>
 
 <table>
     <tr>
