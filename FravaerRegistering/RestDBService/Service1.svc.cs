@@ -110,7 +110,7 @@ namespace RestDBService
 
         public string SensorCheck(SonsorData s)
         {
-            Person localPerson = new Person();
+            int localPersonId = 0;
             Room localRoom = new Room();
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
@@ -118,20 +118,20 @@ namespace RestDBService
                 databaseConnection.Open();
 
                 //Henter Person der Bipede
-                localPerson = GetPersonByStudentId(s.CardID, databaseConnection);
+                localPersonId = GetPersonIDByStudentId(s.CardID, databaseConnection);
 
                 //Hener Lokalet
                 localRoom = GetRoomByName(s.Room, databaseConnection);
 
                 //Henter alle timereg for person
                 List<TimeRegistration> TimeReg = new List<TimeRegistration>();
-                TimeReg = GetAllTimeRegForPerson(localPerson.Person_Id, databaseConnection);
+                TimeReg = GetAllTimeRegForPerson(localPersonId, databaseConnection);
 
 
                 //TimeChecker
                 if (TimeReg.Count == 0)
                 {
-                    AddTimeRegToDB(s.Time, localRoom.Room_Id, localPerson.Person_Id, databaseConnection);
+                    AddTimeRegToDB(s.Time, localRoom.Room_Id, localPersonId, databaseConnection);
                     return "CHECKIN";
                 }
                 else
@@ -145,7 +145,7 @@ namespace RestDBService
                         }
                         else if (treg.TimeRegistration_CheckOut != null)
                         {
-                            AddTimeRegToDB(s.Time, localRoom.Room_Id, localPerson.Person_Id, databaseConnection);
+                            AddTimeRegToDB(s.Time, localRoom.Room_Id, localPersonId, databaseConnection);
                             return "CHECKIN";
                         }
                     }
@@ -174,19 +174,18 @@ namespace RestDBService
                 }
             }
         }
-        private Person GetPersonByStudentId(string cardid, SqlConnection databaseConnection)
+        private int GetPersonIDByStudentId(string cardid, SqlConnection databaseConnection)
         {
-            //TODO: KAN IKKE HENTE PGA ReadPerson(reader) ( SQL SÆTNING HAR IKKE TEAM OG ROLLE..OSV)
-            string FindPerson = "SELECT * FROM Person WHERE Person_StudentId = @cardid";
+            string FindPerson = "SELECT Person_Id FROM Person WHERE Person_StudentId = @cardid";
             using (SqlCommand SelectPersonCommand = new SqlCommand(FindPerson, databaseConnection))
             {
                 SelectPersonCommand.Parameters.AddWithValue("@cardid", cardid);
                 using (SqlDataReader reader = SelectPersonCommand.ExecuteReader())
                 {
-                    Person p = new Person();
+                    int p = 0;
                     while (reader.Read())
                     {
-                        p = ReadPerson(reader);
+                        p = reader.GetInt32(0);
                     }   
                     return p;
                 }
