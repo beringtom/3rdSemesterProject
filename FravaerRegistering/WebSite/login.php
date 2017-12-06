@@ -6,10 +6,11 @@
  * Time: 09:54
  */
 
-if(!isset($_SESSION))
-{
-    session_start();
-}
+//if(!isset($_SESSION))
+//{
+
+//}
+session_start();
 ob_start();
 ?>
 
@@ -102,7 +103,8 @@ ob_start();
 
             $_SESSION["UserLoggedInID"] = $loginUser["FK_PersonId"];
             $_SESSION["UserLoggedInRole"] = $decodedUserData->rolestype;
-            header("Location: ".$_SERVER['REQUEST_URI']);
+            print_r($_SESSION);
+            //header("Location: ".$_SERVER['REQUEST_URI']);
         }
     }
     if(isset($_POST['logud']))
