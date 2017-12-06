@@ -6,6 +6,7 @@
  * Time: 12:17
  */
 require ('Funktion/hentHoldFunktion.php');
+require ('Funktion/seHoldFunktion.php');
 ?>
 
 <!DOCTYPE html>
@@ -40,6 +41,28 @@ require ('Funktion/hentHoldFunktion.php');
     </form>
 </table>
 
+<?php
+if(isset($_POST['submit'])) {
+    $persondata[] = getPersonsInTeam();
+    ?>
+    <table>
+        <form>
+            <tr>
+                <td colspan="2"> Studerende i hold: <?php echo $persondata[0][0]->teamname ?></td>
+            </tr>
+            <?php foreach ($persondata[0] as $pd){
+                 ?>
+            <tr>
+                <td> <?php echo $pd->firstname . " " . $pd->lastname ?> </td>
+                <td><input type="checkbox" name="TilStede" value=""></td>
+                <td><input type="checkbox" name="IkkeTilStede" value=""></td>
+            </tr>
+<?php } ?>
+        </form>
+    </table>
+    <?php
+}
+?>
 </body>
 <?php
 
