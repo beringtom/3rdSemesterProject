@@ -138,17 +138,14 @@ namespace RestDBService
                 {
                     foreach (TimeRegistration treg in TimeReg)
                     {
-                        if (treg.TimeRegistration_CheckOut == null)
+                        if (treg.TimeRegistration_CheckOut == DateTime.Parse("01-01-1753 00:00:00"))
                         {
                             UpdateTimeRegInDB(treg.TimeRegistration_Id, s.Time, databaseConnection);
                             return "CHECKOUT";
                         }
-                        else if (treg.TimeRegistration_CheckOut != null)
-                        {
-                            AddTimeRegToDB(s.Time, localRoom.Room_Id, localPersonId, databaseConnection);
-                            return "CHECKIN";
-                        }
                     }
+                    AddTimeRegToDB(s.Time, localRoom.Room_Id, localPersonId, databaseConnection);
+                    return "CHECKIN";
                 }
             }
             return "ERROR";
@@ -211,22 +208,24 @@ namespace RestDBService
         }
         private void UpdateTimeRegInDB(int regid, string datentime, SqlConnection databaseConnection)
         {
-            string updateTimeRegData = "UPDATE TimeRegistration PUT TimeRegistration_CheckOut = @timeout WHERE TimeRegistration_Id = @regid";
+            string updateTimeRegData = "UPDATE TimeRegistration SET TimeRegistration_CheckOut = @timeout WHERE TimeRegistration_Id = @regid";
             
             using (SqlCommand updateTimeRegCommand = new SqlCommand(updateTimeRegData, databaseConnection))
             {
                 updateTimeRegCommand.Parameters.AddWithValue("@timeout", datentime);
                 updateTimeRegCommand.Parameters.AddWithValue("@regid", regid);
                 updateTimeRegCommand.ExecuteNonQuery();
-            }        }
+            }
+        }
 
         private void AddTimeRegToDB(string datentime, int rid, int pid, SqlConnection databaseConnection)
         {
-            string insertTimeRegData = "INSERT INTO TimeRegistration(TimeRegistration_CheckIn, FK_RoomId, FK_RegPersonId) VALUES(@timein, @roomid, @personid)";
+            string insertTimeRegData = "INSERT INTO TimeRegistration(TimeRegistration_CheckIn,TimeRegistration_CheckOut, FK_RoomId, FK_RegPersonId) VALUES(@timein, @timeout, @roomid, @personid)";
 
-            using (SqlCommand insertTimeRegCommand = new SqlCommand())
+            using (SqlCommand insertTimeRegCommand = new SqlCommand(insertTimeRegData, databaseConnection))
             {
                 insertTimeRegCommand.Parameters.AddWithValue("@timein", datentime);
+                insertTimeRegCommand.Parameters.AddWithValue("@timeout", DateTime.Parse("01-01-1753 00:00:00"));
                 insertTimeRegCommand.Parameters.AddWithValue("@roomid", rid);
                 insertTimeRegCommand.Parameters.AddWithValue("@personid", pid);
                 insertTimeRegCommand.ExecuteNonQuery();
@@ -235,6 +234,10 @@ namespace RestDBService
         }
 
         #endregion
+
+
+
+
 
         public int DeletePerson(string personID)
         {

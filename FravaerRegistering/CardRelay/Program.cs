@@ -16,7 +16,6 @@ namespace CardRelay
     {
         static void Main(string[] args)
         {
-
             int ipind = 8547;
             int ipout = 9876;
 
