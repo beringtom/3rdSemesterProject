@@ -67,6 +67,30 @@ namespace RestDBService
                 }
             }
         }
+
+        public IList<AllPersonData> GetAllPersonsInTeam(string tId)
+        {
+            string selectAllPersons = "select * from Person inner join Roles on Person.FK_RolesId = Roles.Roles_Id inner join Team on Person.FK_TeamId =Team.Team_Id inner join login on Person.Person_Id = login.FK_PersonId WHERE Person.FK_TeamId = " + tId;
+
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand selectCommand = new SqlCommand(selectAllPersons, databaseConnection))
+                {
+                    using (SqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                        List<AllPersonData> studentList = new List<AllPersonData>();
+                        while (reader.Read())
+                        {
+                            AllPersonData student = ReadAllPersonData(reader);
+                            studentList.Add(student);
+                        }
+                        return studentList;
+                    }
+                }
+            }
+        }
+
         //tjekker på om felterne i login tabelen er enes med user input
         public Login Getlogin(Login loginUserPaswords)
         {

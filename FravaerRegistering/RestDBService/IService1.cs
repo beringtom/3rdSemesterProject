@@ -21,6 +21,10 @@ namespace RestDBService
         AllPersonData GetOnePersons(string id);
 
         [OperationContract]
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, UriTemplate = "Person/Team/{id}")]
+        IList<AllPersonData> GetAllPersonsInTeam(string id);
+
+        [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Login/")]
         Login Getlogin(Login loginUserPaswords);
 
