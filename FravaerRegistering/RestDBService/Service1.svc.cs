@@ -115,40 +115,48 @@ namespace RestDBService
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
-                databaseConnection.Open();
+            databaseConnection.Open();
 
-                //Henter Person der Bipede
-                localPersonId = GetPersonIDByStudentId(s.CardID, databaseConnection);
+            //Henter Person der Bipede
+            localPersonId = GetPersonIDByStudentId(s.CardID, databaseConnection);
 
-                //Hener Lokalet
-                localRoom = GetRoomByName(s.Room, databaseConnection);
+            //Hener Lokalet
+            localRoom = GetRoomByName(s.Room, databaseConnection);
 
-                //Henter alle timereg for person
-                List<TimeRegistration> TimeReg = new List<TimeRegistration>();
-                TimeReg = GetAllTimeRegForPerson(localPersonId, databaseConnection);
+            //Henter alle timereg for person
+            List<TimeRegistration> TimeReg = new List<TimeRegistration>();
+            TimeReg = GetAllTimeRegForPerson(localPersonId, databaseConnection);
 
 
-                //TimeChecker
-                if (TimeReg.Count == 0)
+            //TimeChecker
+                if (localPersonId != 0)
                 {
-                    AddTimeRegToDB(s.Time, localRoom.Room_Id, localPersonId, databaseConnection);
-                    return "CHECKIN";
+                    if (TimeReg.Count == 0)
+                    {
+                        AddTimeRegToDB(s.Time, localRoom.Room_Id, localPersonId, databaseConnection);
+                        return "CHECKIN";
+                    }
+                    else
+                    {
+                        foreach (TimeRegistration treg in TimeReg)
+                        {
+                            if (treg.TimeRegistration_CheckOut == DateTime.Parse("01-01-1753 00:00:00"))
+                            {
+                                UpdateTimeRegInDB(treg.TimeRegistration_Id, s.Time, databaseConnection);
+                                return "CHECKOUT";
+                            }
+                        }
+                        AddTimeRegToDB(s.Time, localRoom.Room_Id, localPersonId, databaseConnection);
+                        return "CHECKIN";
+                    }
+
                 }
                 else
                 {
-                    foreach (TimeRegistration treg in TimeReg)
-                    {
-                        if (treg.TimeRegistration_CheckOut == DateTime.Parse("01-01-1753 00:00:00"))
-                        {
-                            UpdateTimeRegInDB(treg.TimeRegistration_Id, s.Time, databaseConnection);
-                            return "CHECKOUT";
-                        }
-                    }
-                    AddTimeRegToDB(s.Time, localRoom.Room_Id, localPersonId, databaseConnection);
-                    return "CHECKIN";
+                    return "ERROR";
                 }
+
             }
-            return "ERROR";
         }
 
         #region TimeRegistrationDBStuff

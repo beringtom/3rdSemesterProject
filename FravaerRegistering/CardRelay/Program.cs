@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -38,13 +39,15 @@ namespace CardRelay
 
                     
 
-                    SensorData sdata = new SensorData(SplitDecodedData[1], SplitDecodedData[2], SplitDecodedData[3]);
-                    string response = AddSensordata(sdata ,Url).Result;
+                    SensorData sdata = new SensorData(SplitDecodedData[1], SplitDecodedData[2].Split('.')[0], SplitDecodedData[3].Split('\n')[0]);
+
+                    string response = AddSensorData(sdata, Url);
+                    Console.WriteLine(response);
 
 
 
                     UdpClient Sender = new UdpClient(remote.Address.ToString(), ipout);
-                    byte[] send = Encoding.ASCII.GetBytes("CARD/" + response + "/" + SplitDecodedData[3]);
+                    byte[] send = Encoding.ASCII.GetBytes("CARD/" + response.Split('"')[1] + "/" + SplitDecodedData[3]);
                     Sender.Send(send, send.Length);
 
                 }
@@ -53,27 +56,18 @@ namespace CardRelay
                     Console.WriteLine(e.ToString());
                 }
             }
-
-            
         }
 
-
-
-
-        private static async Task<string> AddSensordata(object s, string uri)
+        public static string AddSensorData(SensorData s, string url)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client  = new HttpClient())
             {
+                var jString = JsonConvert.SerializeObject(s);
+                Console.WriteLine(jString);
+                var stringContent = new StringContent(jString, Encoding.UTF8, "application/json");
 
-                var jsonString = JsonConvert.SerializeObject(s);
-                StringContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
-
-
-                HttpResponseMessage response = await client.PostAsync(uri, content);
-                response.EnsureSuccessStatusCode();
-                string str = await response.Content.ReadAsStringAsync();
-                string returnString = JsonConvert.DeserializeObject<string>(str);
-                return returnString;
+                var response = client.PostAsync(url, stringContent);
+                return response.Result.Content.ReadAsStringAsync().Result;
             }
         }
     }
