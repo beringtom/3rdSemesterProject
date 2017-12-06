@@ -18,5 +18,10 @@ namespace CardRelay
             Time = time;
             CardID = cardId;
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(Room)}: {Room}, {nameof(Time)}: {Time}, {nameof(CardID)}: {CardID}";
+        }
     }
 }
