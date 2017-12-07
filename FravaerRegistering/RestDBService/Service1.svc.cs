@@ -449,6 +449,7 @@ namespace RestDBService
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
+                databaseConnection.Open();
                 using (SqlCommand selectCommand = new SqlCommand(selectRelevantSchedule, databaseConnection))
                 {
                     using (SqlDataReader reader = selectCommand.ExecuteReader())
