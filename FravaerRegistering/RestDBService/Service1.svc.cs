@@ -68,6 +68,7 @@ namespace RestDBService
             }
         }
 
+        //Henter alle studenter (FK_RolesId = 3) i det givne hold (tId)
         public IList<AllPersonData> GetAllPersonsInTeam(string tId)
         {
             string selectAllPersons = "select * from Person inner join Roles on Person.FK_RolesId = Roles.Roles_Id inner join Team on Person.FK_TeamId =Team.Team_Id inner join login on Person.Person_Id = login.FK_PersonId WHERE Person.FK_TeamId = " + tId + " AND FK_RolesId = 3";
