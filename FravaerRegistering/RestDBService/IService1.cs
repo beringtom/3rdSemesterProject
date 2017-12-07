@@ -58,6 +58,11 @@ namespace RestDBService
              UriTemplate = "Sensor/")]
         string SensorCheck(SonsorData s);
 
+        [OperationContract]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+             UriTemplate = "Schedule/{id}")]
+        IList<Schedule> GetScheduleForTeam(string id);
+
     }
 
 
@@ -203,35 +208,21 @@ public class AllPersonData
         public string CardID;
 
     }
-    
 
-    // Schedule bliver sandsynligvis slettet igen, hvis den er unødvendig.
-    // Der skal mere research af Outlook til før vi ved det.
-
-    //public class Lecture
-    //{
-    //    [DataMember] public int Lecture_Id;
-    //    [DataMember] public DateTime Lecture_StartTime;
-    //    [DataMember] public DateTime Lecture_EndTime;
-    //}
-
-    public class CompositeType
+    public class Schedule
     {
-        bool boolValue = true;
-        string stringValue = "Hello ";
-
         [DataMember]
-        public bool BoolValue
-        {
-            get { return boolValue; }
-            set { boolValue = value; }
-        }
-
+        public int ScheduleId;
         [DataMember]
-        public string StringValue
-        {
-            get { return stringValue; }
-            set { stringValue = value; }
-        }
+        public int FKScheduleRoomId;
+        [DataMember]
+        public int FKScheduleTeamId;
+        [DataMember]
+        public DateTime ScheduleTimefrom;
+        [DataMember]
+        public DateTime ScheduleTimeTo;
+        [DataMember]
+        public string ScheduleLecture;
     }
+    
 }

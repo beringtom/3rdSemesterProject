@@ -442,6 +442,29 @@ namespace RestDBService
         }
 
 
+        public IList<Schedule> GetScheduleForTeam(string id)
+        {
+            string selectRelevantSchedule = "SELECT * FROM Schedule INNER JOIN Team on Schedule.FK_ScheduleTeamId = Team.Team_Id WHERE FK_ScheduleTeamId = " + id;
+
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                using (SqlCommand selectCommand = new SqlCommand(selectRelevantSchedule, databaseConnection))
+                {
+                    using (SqlDataReader reader = selectCommand.ExecuteReader())
+                    {
+                        List<Schedule> returnList = new List<Schedule>();
+                        while (reader.Read())
+                        {
+                            Schedule sc = ReadSchedule(reader);
+                            returnList.Add(sc);
+                        }
+                        return returnList;
+                    }
+                }
+            }
+        }
+
+
 
         public Person ReadPerson(IDataRecord reader)
         {
@@ -570,6 +593,29 @@ namespace RestDBService
                 FK_RegPersonId = fkpid
             };
             return timeRegistration;
+        }
+
+        public Schedule ReadSchedule(IDataReader reader)
+        {
+            int sid = reader.GetInt32(0);
+            int fkrid = reader.GetInt32(1);
+            int fktid = reader.GetInt32(2);
+            DateTime dfrom = reader.GetDateTime(3);
+            DateTime dto = reader.GetDateTime(4);
+            string sctitle = reader.GetString(5);
+            int tid = reader.GetInt32(6);
+            string tname = reader.GetString(7);
+
+            Schedule Sch = new Schedule()
+            {
+                ScheduleId = sid,
+                FKScheduleRoomId = fkrid,
+                FKScheduleTeamId = fktid,
+                ScheduleTimefrom = dfrom,
+                ScheduleTimeTo = dto,
+                ScheduleLecture = sctitle
+            };
+            return Sch;
         }
 
 

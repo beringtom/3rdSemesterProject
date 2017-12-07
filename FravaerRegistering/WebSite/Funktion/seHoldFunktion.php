@@ -8,7 +8,7 @@
 
 function getPersonsInTeam()
 {
-    $getteamsuri = "http://restfravaerservice.azurewebsites.net/service1.svc/person/team/".$_POST['klasse'];
+    $getteamsuri = "http://restfravaerservice.azurewebsites.net/service1.svc/person/team/".$_get['klasse'];
     $teamcontent = file_get_contents($getteamsuri);
     $decodedTeamContent = json_decode($teamcontent);
     return $decodedTeamContent;

@@ -7,6 +7,7 @@
  */
 require ('Funktion/hentHoldFunktion.php');
 require ('Funktion/seHoldFunktion.php');
+require ('Funktion/hentScheduleFunktion.php');
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +19,7 @@ require ('Funktion/seHoldFunktion.php');
 <body>
 
 <table>
-    <form method="post">
+    <form method="get">
     <tr>
         <td colspan="2"><h2>Vælg Hold</h2></td>
     </tr>
@@ -31,17 +32,40 @@ require ('Funktion/seHoldFunktion.php');
                 foreach ($teamdata[0] as $tid) {
                     echo "<option value=".$tid->Team_Id. ">".$tid->Team_Name."</option>";
                 } ?>
-            </select></td>
+            </select>
+        </td>
     </tr>
-        <td>Dato:</td>
-        <td><input type="date" name="datepicker" style="float:right"></td>
     <tr>
-        <td><input type="submit" value="Submit" name="submit" style="float:right;"></td>
+        <td><input type="submit" value="Find Lektioner" style="float:right;"></td>
     </tr>
     </form>
+    <?php
+    if(isset($_GET['klasse'])) {
+        ?>
+        <form method="get">
+        <tr>
+            <td>Lektion Picker:</td>
+            <td><select name="schedule">
+                    <option value="0">-- None --</option>
+                    <?php
+                    $scheduledata[] = getSchedule();
+                    foreach ($scheduledata[0] as $tid) {
+                        echo "<option value=" . $scheduledata->Schedule_Timefrom . ">" . $scheduledata->Schedule_Timefrom . "</option>";
+                    } ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Hent..."></td>
+        </tr>
+        </form>
+        <?php
+    }
+    ?>
 </table>
-
+<!--
 <?php
+/*
 if(isset($_POST['submit'])) {
     $persondata[] = getPersonsInTeam();
     ?>
@@ -61,11 +85,26 @@ if(isset($_POST['submit'])) {
         </form>
     </table>
     <?php
+*/
+?>
+
+-->
+
+
+<?php
+if (isset($_GET['klasse']))
+{
+    if (isset($_GET['schedule']))
+    {
+
+
+
+
+
+
+
+    }
 }
 ?>
+
 </body>
-<?php
-
-                    
-?>
-
