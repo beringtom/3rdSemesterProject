@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Cryptography.X509Certificates;
@@ -613,8 +614,8 @@ namespace RestDBService
                 ScheduleId = sid,
                 FKScheduleRoomId = fkrid,
                 FKScheduleTeamId = fktid,
-                ScheduleTimefrom = dfrom,
-                ScheduleTimeTo = dto,
+                ScheduleTimefrom = dfrom.ToString("dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture),
+                ScheduleTimeTo = dto.ToString("dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture),
                 ScheduleLecture = sctitle
             };
             return Sch;

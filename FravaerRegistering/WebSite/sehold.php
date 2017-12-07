@@ -42,17 +42,25 @@ require ('Funktion/hentScheduleFunktion.php');
     <?php
     if(isset($_GET['klasse'])) {
         ?>
+
         <form method="get">
+            <input type="hidden" name="klasse" value="<?php echo $_GET['klasse']; ?>">
         <tr>
-            <td>Lektion Picker:</td>
-            <td><select name="schedule">
-                    <option value="0">-- None --</option>
+            <td>Lektion: </td>
+            <td>
+
+            <select name="schedule">
+                <option value="0">-- NONE --</option>
+                <?php
+                    $scheduledata[] = getSchedule($_GET['klasse']);
+                    foreach ($scheduledata[0] as $time)
+                    {?>
+                        <option value="<?php echo $time->ScheduleTimefrom; ?>"><?php echo $time->ScheduleTimefrom; ?></option>
                     <?php
-                    $scheduledata[] = getSchedule();
-                    foreach ($scheduledata[0] as $tid) {
-                        echo "<option value=" . $scheduledata->Schedule_Timefrom . ">" . $scheduledata->Schedule_Timefrom . "</option>";
-                    } ?>
-                </select>
+                    }
+                ?>
+            </select>
+
             </td>
         </tr>
         <tr>
@@ -92,10 +100,9 @@ if(isset($_POST['submit'])) {
 
 
 <?php
-if (isset($_GET['klasse']))
+
+if (isset($_GET['schedule']))
 {
-    if (isset($_GET['schedule']))
-    {
 
 
 
@@ -103,7 +110,6 @@ if (isset($_GET['klasse']))
 
 
 
-    }
 }
 ?>
 

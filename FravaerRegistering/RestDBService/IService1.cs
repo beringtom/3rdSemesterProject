@@ -218,9 +218,9 @@ public class AllPersonData
         [DataMember]
         public int FKScheduleTeamId;
         [DataMember]
-        public DateTime ScheduleTimefrom;
+        public string ScheduleTimefrom;
         [DataMember]
-        public DateTime ScheduleTimeTo;
+        public string ScheduleTimeTo;
         [DataMember]
         public string ScheduleLecture;
     }

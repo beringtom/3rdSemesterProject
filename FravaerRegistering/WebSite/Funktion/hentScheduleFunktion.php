@@ -6,10 +6,9 @@
  * Time: 10:02
  */
 
-function getSchedule()
+function getSchedule($s)
 {
-    $getScheduleuri = "http://restfravaerservice.azurewebsites.net/service1.svc/Schedule/"+$_GET['klasse'];
-    print_r($getScheduleuri);
+    $getScheduleuri = "http://restfravaerservice.azurewebsites.net/service1.svc/Schedule/".$s;
     $Schedulecontent = file_get_contents($getScheduleuri);
     $decodedScheduleContent = json_decode($Schedulecontent);
     return $decodedScheduleContent;
