@@ -59,7 +59,7 @@ namespace RestDBService
         string SensorCheck(SonsorData s);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
              UriTemplate = "Schedule/{id}")]
         IList<Schedule> GetScheduleForTeam(string id);
 
