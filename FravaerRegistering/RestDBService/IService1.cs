@@ -63,6 +63,23 @@ namespace RestDBService
              UriTemplate = "Schedule/{id}")]
         IList<Schedule> GetScheduleForTeam(string id);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Time/{id}")]
+        IList<TimeRegistration> GetAllTimeRegForPerson(string id);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Time/")]
+        void WebsiteAddTimeRegToDB(TimeRegistration t);
+
+        [OperationContract]
+        [WebInvoke(Method = "PUT", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Time/{id}")]
+        void WebsiteUpdateTimeRegInDB(string id, TimeRegistration t);
+
+
+
     }
 
 
