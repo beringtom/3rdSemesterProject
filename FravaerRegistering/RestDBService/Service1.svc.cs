@@ -166,7 +166,7 @@ namespace RestDBService
                     {
                         foreach (TimeRegistration treg in TimeReg)
                         {
-                            if (treg.TimeRegistration_CheckOut == DateTime.Parse("01-01-1753 00:00:00"))
+                            if (treg.TimeRegistration_CheckOut == "01-01-1753 00:00:00")
                             {
                                 UpdateTimeRegInDB(treg.TimeRegistration_Id, s.Time, databaseConnection);
                                 return "CHECKOUT";
@@ -512,6 +512,51 @@ namespace RestDBService
             }
         }
 
+        public IList<Room> GetAllRooms()
+        {
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                string FindRooms = "SELECT * FROM Room";
+                using (SqlCommand SelectRommCommand = new SqlCommand(FindRooms, databaseConnection))
+                {
+                    using (SqlDataReader reader = SelectRommCommand.ExecuteReader())
+                    {
+                        IList<Room> r = new List<Room>();
+                        while (reader.Read())
+                        {
+                            Room tr = ReadRoom(reader);
+                            r.Add(tr);
+                        }
+                        return r;
+                    }
+                }
+            }
+        }
+
+        public TimeRegistration GetTimeForEdit(string timeid)
+        {
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+
+                string FindTimeReg = "SELECT * FROM TimeRegistration WHERE TimeRegistration_Id = @tid";
+                using (SqlCommand SelectTimeRegCommand = new SqlCommand(FindTimeReg, databaseConnection))
+                {
+                    SelectTimeRegCommand.Parameters.AddWithValue("@tid", timeid);
+                    using (SqlDataReader reader = SelectTimeRegCommand.ExecuteReader())
+                    {
+                        TimeRegistration returned = new TimeRegistration();
+                        while (reader.Read())
+                        {
+                            returned = ReadTimeReg(reader);
+                        }
+                        return returned;
+                    }
+                }
+            }
+        }
+
 
 
         public Person ReadPerson(IDataRecord reader)
@@ -627,8 +672,8 @@ namespace RestDBService
         public TimeRegistration ReadTimeReg(IDataReader reader)
         {
             int regid = reader.GetInt32(0);
-            DateTime cin = reader.GetDateTime(1);
-            DateTime cout = reader.GetDateTime(2);
+            string cin = reader.GetDateTime(1).ToString("dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture);
+            string cout = reader.GetDateTime(2).ToString("dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture);
             int fkrid = reader.GetInt32(3);
             int fkpid = reader.GetInt32(4);
 

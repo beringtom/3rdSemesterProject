@@ -78,7 +78,15 @@ namespace RestDBService
             UriTemplate = "Time/{id}")]
         void WebsiteUpdateTimeRegInDB(string id, TimeRegistration t);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Room/")]
+        IList<Room> GetAllRooms();
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Time/Edit/{id}")]
+        TimeRegistration GetTimeForEdit(string id);
 
     }
 
@@ -135,9 +143,9 @@ namespace RestDBService
         [DataMember]
         public int TimeRegistration_Id;
         [DataMember]
-        public DateTime TimeRegistration_CheckIn;
+        public string TimeRegistration_CheckIn;
         [DataMember]
-        public DateTime TimeRegistration_CheckOut;
+        public string TimeRegistration_CheckOut;
         [DataMember]
         public int FK_RoomId;
         [DataMember]
