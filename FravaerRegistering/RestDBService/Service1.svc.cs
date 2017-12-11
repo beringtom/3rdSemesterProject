@@ -150,8 +150,8 @@ namespace RestDBService
             localRoom = GetRoomByName(s.Room, databaseConnection);
 
             //Henter alle timereg for person
-            List<TimeRegistration> TimeReg = new List<TimeRegistration>();
-            TimeReg = GetAllTimeRegForPerson(localPersonId, databaseConnection);
+            IList<TimeRegistration> TimeReg = new List<TimeRegistration>();
+            TimeReg = GetAllTimeRegForPerson(localPersonId.ToString());
 
 
             //TimeChecker
@@ -187,24 +187,30 @@ namespace RestDBService
 
         #region TimeRegistrationDBStuff
 
-        private List<TimeRegistration> GetAllTimeRegForPerson(int personid, SqlConnection databaseConnection)
+        public IList<TimeRegistration> GetAllTimeRegForPerson(string personid)
         {
-            string FindTimeReg = "SELECT * FROM TimeRegistration WHERE FK_RegPersonId = @regperid";
-            using (SqlCommand SelectTimeRegCommand = new SqlCommand(FindTimeReg, databaseConnection))
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
-                SelectTimeRegCommand.Parameters.AddWithValue("@regperid", personid);
-                using (SqlDataReader reader = SelectTimeRegCommand.ExecuteReader())
+                databaseConnection.Open();
+
+                string FindTimeReg = "SELECT * FROM TimeRegistration WHERE FK_RegPersonId = @regperid";
+                using (SqlCommand SelectTimeRegCommand = new SqlCommand(FindTimeReg, databaseConnection))
                 {
-                    List<TimeRegistration> returnlist = new List<TimeRegistration>();
-                    while (reader.Read())
+                    SelectTimeRegCommand.Parameters.AddWithValue("@regperid", personid);
+                    using (SqlDataReader reader = SelectTimeRegCommand.ExecuteReader())
                     {
-                        TimeRegistration t = ReadTimeReg(reader);
-                        returnlist.Add(t);
+                        List<TimeRegistration> returnlist = new List<TimeRegistration>();
+                        while (reader.Read())
+                        {
+                            TimeRegistration t = ReadTimeReg(reader);
+                            returnlist.Add(t);
+                        }
+                        return returnlist;
                     }
-                    return returnlist;
                 }
             }
         }
+
         private int GetPersonIDByStudentId(string cardid, SqlConnection databaseConnection)
         {
             string FindPerson = "SELECT Person_Id FROM Person WHERE Person_StudentId = @cardid";
@@ -268,6 +274,45 @@ namespace RestDBService
         }
 
         #endregion
+
+        public void WebsiteUpdateTimeRegInDB(string regid, TimeRegistration t)
+        {
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                string updateTimeRegData =
+                    "UPDATE TimeRegistration SET TimeRegistration_CheckOut = @timeout, TimeRegistration_CheckIn = @timein WHERE TimeRegistration_Id = @regid";
+
+                using (SqlCommand updateTimeRegCommand = new SqlCommand(updateTimeRegData, databaseConnection))
+                {
+                    updateTimeRegCommand.Parameters.AddWithValue("@timein", t.TimeRegistration_CheckIn);
+                    updateTimeRegCommand.Parameters.AddWithValue("@timeout", t.TimeRegistration_CheckOut);
+                    updateTimeRegCommand.Parameters.AddWithValue("@regid", regid);
+                    updateTimeRegCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void WebsiteAddTimeRegToDB(TimeRegistration t)
+        {
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                string insertTimeRegData =
+                    "INSERT INTO TimeRegistration(TimeRegistration_CheckIn,TimeRegistration_CheckOut, FK_RoomId, FK_RegPersonId) VALUES(@timein, @timeout, @roomid, @personid)";
+
+                using (SqlCommand insertTimeRegCommand = new SqlCommand(insertTimeRegData, databaseConnection))
+                {
+                    insertTimeRegCommand.Parameters.AddWithValue("@timein", t.TimeRegistration_CheckIn);
+                    insertTimeRegCommand.Parameters.AddWithValue("@timeout", t.TimeRegistration_CheckOut);
+                    insertTimeRegCommand.Parameters.AddWithValue("@roomid", t.FK_RoomId);
+                    insertTimeRegCommand.Parameters.AddWithValue("@personid", t.FK_RegPersonId);
+                    insertTimeRegCommand.ExecuteNonQuery();
+                }
+
+            }
+        }
+
 
 
 
