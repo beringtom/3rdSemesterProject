@@ -46,6 +46,7 @@ if(isset($_GET['rperson']))
     {
         $editid = $_GET['edit'];
 
+        //$getresturitimeforedit = "http://restfravaerservice.azurewebsites.net/service1.svc/Time/Edit/".$editid;
         $getresturitimeforedit = "http://localhost:7150/Service1.svc/Time/Edit/".$editid;
 
         $contenttimeforedit = file_get_contents($getresturitimeforedit);
