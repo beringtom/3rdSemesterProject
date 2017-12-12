@@ -17,7 +17,7 @@
     public static function getMessages($access_token, $user_email) {
       $getMessagesParameters = array (
         // Only return Subject, ReceivedDateTime, and From fields
-        "\$select" => "Subject,ReceivedDateTime,From",
+        "\$select" => "Subject,ReceivedDateTime,From, Body",
         // Sort by ReceivedDateTime, newest first
         "\$orderby" => "ReceivedDateTime DESC",
         // Return at most 10 results
@@ -32,11 +32,11 @@
     public static function getEvents($access_token, $user_email) {
       $getEventsParameters = array (
         // Only return Subject, Start, and End fields
-        "\$select" => "Subject,Start,End",
+        "\$select" => "Subject,Start,End, Location, Body",
         // Sort by Start, oldest first
-        "\$orderby" => "Start/DateTime",
+        "\$orderby" => "Start/DateTime DESC",
         // Return at most 10 results
-        "\$top" => "1000000000"
+        "\$top" => "250"
       );
           
       $getEventsUrl = self::$outlookApiUrl."/Me/Events?".http_build_query($getEventsParameters);
@@ -58,6 +58,33 @@
                       
       return self::makeApiCall($access_token, $user_email, "GET", $getContactsUrl);
     }
+
+   /* public static function SendMail($access_token, $user_email)
+    {
+
+       $data = array("Subject"=> "Ikke mødt op til time",
+        "Body"=>"Content" => "Du har ikke var til time i dag.".date("d-m-Y")."snak med din underviser",
+        "ToRecipients"=>"Address" => "jesper.bay@live.dk");
+    $json_string = json_encode($data);
+echo $json_string;
+      
+
+$uri = self::$outlookApiUrl."/Me/sendmail";
+
+   $ch = curl_init($uri);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($json_string))
+    );
+    $jsondata = curl_exec($ch);
+
+       
+        echo $uri;               
+      return self::makeApiCall($access_token, $user_email, "POST", $uri);
+    }*/
     
     public static function makeApiCall($access_token, $user_email, $method, $url, $payload = NULL) {
       // Generate the list of headers to always send.
