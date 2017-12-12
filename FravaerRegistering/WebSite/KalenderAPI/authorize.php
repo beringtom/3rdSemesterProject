@@ -4,7 +4,7 @@
   require_once('oauth.php');
   require_once('outlook.php');
   $auth_code = $_GET['code'];
-  $redirectUri = 'http://localhost/php-tutorial/authorize.php';
+  $redirectUri = 'http://localhost/FravaerRegistering/WebSite/KalenderAPI/authorize.php';
   
   $tokens = oAuthService::getTokenFromAuthCode($auth_code, $redirectUri);
   
@@ -24,7 +24,8 @@
     $_SESSION['user_email'] = $user['EmailAddress'];
     
     // Redirect back to home page
-    header("Location: http://localhost/php-tutorial/home.php");
+    header("Location: http://localhost/FravaerRegistering/WebSite/calendar.php");
+    print_r($_SESSION);
   }
   else
   {

@@ -27,6 +27,7 @@
                                     <td><a href="opretbruger.php">Opret Bruger</a></td>
                                     <td><a href="redigerbruger.php">Redigere Bruger</a></td>
                                     <td><a href="sletbruger.php">Slet Brugere</a></td>
+                                    <td><a href="fravaer.php">Se Fravær</a></td>
                                 </tr>
                             </table>
                         </td>

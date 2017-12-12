@@ -4,7 +4,7 @@
   require('outlook.php');
   
   $loggedIn = !is_null($_SESSION['access_token']);
-  $redirectUri = 'http://localhost/php-tutorial/authorize.php';
+  $redirectUri = 'http://localhost/FravaerRegistering/WebSite/KalenderAPI/authorize.php';
 ?>
 <html>
   <head>

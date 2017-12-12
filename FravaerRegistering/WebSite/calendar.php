@@ -12,9 +12,8 @@ th {
 </style>
 <?php
   session_start();
-  require('oauth.php');
-  require('outlook.php');
-  print_r($_SESSION);
+  require('KalenderAPI/oauth.php');
+  require('KalenderAPI/outlook.php');
   $loggedIn = !is_null($_SESSION['access_token']);
   $redirectUri = 'http://localhost/FravaerRegistering/WebSite/KalenderAPI/authorize.php';
 ?>
@@ -23,6 +22,7 @@ th {
     <title>PHP Calendar API Tutorial</title>
   </head>
   <body>
+    <?php include ("menu.php") ?>
     <?php 
       if (!$loggedIn) {
     ?>
@@ -41,6 +41,8 @@ th {
           <th>Subject</th>
           <th>Start</th>
           <th>End</th>
+          <th>Location</th>
+          <th>Content</th>
         </tr>
         
         <?php foreach($events['value'] as $event) { ?>
@@ -48,6 +50,8 @@ th {
             <td><?php echo $event['Subject'] ?></td>
             <td><?php echo $event['Start']['DateTime'] ?></td>
             <td><?php echo $event['End']['DateTime'] ?></td>
+            <td><?php echo $event['Location']['DisplayName'] ?></td>
+            <td><?php echo $event['Body']['Content'] ?></td>
           </tr>
         <?php } ?>
       </table>

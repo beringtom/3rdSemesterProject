@@ -5,7 +5,7 @@
   require('outlook.php');
   
   $loggedIn = !is_null($_SESSION['access_token']);
-  $redirectUri = 'http://localhost/php-tutorial/authorize.php';
+  $redirectUri = 'http://localhost/FravaerRegistering/WebSite/KalenderAPI/authorize.php';
 ?>
 
 <html>
@@ -31,6 +31,7 @@
           <th>From</th>
           <th>Subject</th>
           <th>Received</th>
+          <th>Content</th>
         </tr>
         
         <?php foreach($messages['value'] as $message) { ?>
@@ -38,6 +39,7 @@
             <td><?php echo $message['From']['EmailAddress']['Name'] ?></td>
             <td><?php echo $message['Subject'] ?></td>
             <td><?php echo $message['ReceivedDateTime'] ?></td>
+            <td><?php echo $message['Body']['Content'] ?></td>
           </tr>
         <?php } ?>
       </table>
