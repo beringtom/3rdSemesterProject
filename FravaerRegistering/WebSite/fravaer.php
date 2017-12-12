@@ -46,7 +46,7 @@ if(isset($_GET['rperson']))
     {
         $editid = $_GET['edit'];
 
-        $getresturitimeforedit = "http://localhost:7150/Service1.svc/Time/Edit/".$editid;
+        $getresturitimeforedit = "http://restfravaerservice.azurewebsites.net/service1.svc/Time/Edit/".$editid;
 
         $contenttimeforedit = file_get_contents($getresturitimeforedit);
 
@@ -55,7 +55,7 @@ if(isset($_GET['rperson']))
         $datein = date_format(new DateTime($decodedContenttimeforedit->TimeRegistration_CheckIn),'Y-m-d\TH:i');
         $dateout = date_format(new DateTime($decodedContenttimeforedit->TimeRegistration_CheckOut),'Y-m-d\TH:i');
         ?>
-        <table>
+        <table class="table table-bordered">
             <tr>
                 <td>IN</td>
                 <td>OUT</td>
@@ -82,8 +82,8 @@ if(isset($_GET['rperson']))
             $json_string = json_encode($data);
 
 
-            //$uri = "http://restfravaerservice.azurewebsites.net/service1.svc/Time/" . $timeid;
-            $uri = "http://localhost:7150/Service1.svc/Time/" . $timeid;
+            $uri = "http://restfravaerservice.azurewebsites.net/service1.svc/Time/" . $timeid;
+            //$uri = "http://localhost:7150/Service1.svc/Time/" . $timeid;
             $ch = curl_init($uri);
 
 
@@ -108,7 +108,7 @@ if(isset($_GET['rperson']))
     if(isset($_GET['opret']))
     {
         ?>
-        <table>
+        <table class="table table-bordered">
             <tr>
                 <td>IN</td>
                 <td>OUT</td>
@@ -120,8 +120,8 @@ if(isset($_GET['rperson']))
                     <td>
                         <select name="room">
                             <?php
-                            //$getresturiroom = "http://restfravaerservice.azurewebsites.net/service1.svc/Room/";
-                            $getresturiroom = "http://localhost:7150/Service1.svc/Room/";
+                            $getresturiroom = "http://restfravaerservice.azurewebsites.net/service1.svc/Room/";
+                            //$getresturiroom = "http://localhost:7150/Service1.svc/Room/";
 
                             $contentroom = file_get_contents($getresturiroom);
 
@@ -145,9 +145,9 @@ if(isset($_GET['rperson']))
             $data = array("TimeRegistration_CheckIn" => $tin, "TimeRegistration_CheckOut" => $tout, "FK_RegPersonId" => $_GET['rperson'], "FK_RoomId" => $roomid);
             $json_string = json_encode($data);
             print_r($json_string);
-            //$uri = "http://restfravaerservice.azurewebsites.net/service1.svc/Time/";
+            $uri = "http://restfravaerservice.azurewebsites.net/service1.svc/Time/";
 
-            $uri = "http://localhost:7150/Service1.svc/Time/";
+           // $uri = "http://localhost:7150/Service1.svc/Time/";
             $ch = curl_init($uri);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
             curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string);
@@ -162,9 +162,9 @@ if(isset($_GET['rperson']))
     }
     else{
 
-        //$getresturifortime = "http://restfravaerservice.azurewebsites.net/service1.svc/Time/".$_GET['rperson'];
+        $getresturifortime = "http://restfravaerservice.azurewebsites.net/service1.svc/Time/".$_GET['rperson'];
 
-        $getresturifortime = "http://localhost:7150/Service1.svc/Time/".$_GET['rperson'];
+        //$getresturifortime = "http://localhost:7150/Service1.svc/Time/".$_GET['rperson'];
 
         $contentfortime = file_get_contents($getresturifortime);
 
@@ -174,7 +174,7 @@ if(isset($_GET['rperson']))
         ?>
 
     <a href="?rperson=<?php echo($_GET['rperson']); ?>&opret">Opret</a>
-    <table border="1">
+    <table class="table table-bordered">
         <tr>
             <td>Check-In time</td>
             <td>Check-Out time</td>

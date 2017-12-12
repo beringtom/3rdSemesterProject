@@ -5,13 +5,11 @@
  * Date: 28-11-2017
  * Time: 09:54
  */
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+    ob_start();
+}
 
-//if(!isset($_SESSION))
-//{
-
-//}
-session_start();
-ob_start();
 ?>
 
 <!DOCTYPE html>
@@ -20,10 +18,10 @@ ob_start();
         <meta charset="UTF-8">
         <title>Fraværssystem - login</title>
     </head>
-        <form class="col-4" method="post">
+        <form class="col-4" method="post" action="#">
         <table style="float:right;">
             <?php
-                if($_SESSION == False)
+                if(!isset($_SESSION['UserLoggedInID']))
                     {
                         ?>
                         <tr>
@@ -40,18 +38,9 @@ ob_start();
                         </tr>
                         <?php
                     }
-                if($_SESSION == true)
+                else if(isset($_SESSION['UserLoggedInID']))
                     { ?>
                         <tr>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
                             <td style="float:right;"><input type="submit"  name="logud" value="Logud"></td>
                         </tr>
                     <?php
@@ -98,13 +87,18 @@ ob_start();
         print_r($loginUser);
         if($loginUser["Login_Id"] != 0)
         {
-            $userDataRaw = file_get_contents("http://restfravaerservice.azurewebsites.net/service1.svc/Person/".$loginUser["FK_PersonId"]);
-            $decodedUserData = json_decode($userDataRaw);
+            if(!isset($_SESSION["UserLoggedInID"]))
+            {
+                $userDataRaw = file_get_contents("http://restfravaerservice.azurewebsites.net/service1.svc/Person/".$loginUser["FK_PersonId"]);
+                $decodedUserData = json_decode($userDataRaw);
 
-            $_SESSION["UserLoggedInID"] = $loginUser["FK_PersonId"];
-            $_SESSION["UserLoggedInRole"] = $decodedUserData->rolestype;
-            print_r($_SESSION);
-            //header("Location: ".$_SERVER['REQUEST_URI']);
+                $_SESSION["UserLoggedInID"] = $loginUser["FK_PersonId"];
+                $_SESSION["UserLoggedInRole"] = $decodedUserData->rolestype;
+                //print_r($_SESSION);
+
+                $page = $_SERVER['PHP_SELF'];
+                header("Location: $page ");
+            }
         }
     }
     if(isset($_POST['logud']))
