@@ -63,9 +63,9 @@ require ("Funktion/hentHoldFunktion.php")
             <td>Rolle:</td>
             <td><select name="rolle">
                     <option value="0">-- None --</option>
-                    <option value="1">Studerende</option>
+                    <option value="3">Studerende</option>
                     <option value="2">Underviser</option>
-                    <option value="3">Uddannelses Leder</option>
+                    <option value="1">Uddannelses Leder</option>
                 </select>
             </td>
         </tr>
