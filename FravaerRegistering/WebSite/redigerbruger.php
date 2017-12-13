@@ -1,7 +1,8 @@
 <?php
 session_start();
 ob_start();
-require("Funktion/hentHoldFunktion.php")
+require("Funktion/hentHoldFunktion.php");
+require ('Funktion/hentPerson.php');
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +13,23 @@ require("Funktion/hentHoldFunktion.php")
 </head>
 <body>
 
+<?php include ("menu.php"); ?>
+<form method="get">
+    <select name="id">
+        <option value="0">-- None --</option>
+       <?php $persondata[] = getPerson(); ?>
+        <?php foreach ($persondata[0] as $item)
+        {
+        echo "<option value=".$item->rid. ">".$item->firstname."</option>";
+        } ?>
+    </select>
+    <input type="submit" value="vælg person">
+</form>
 <?php
+if(isset($_GET['id']))
+{
+
+
 $getresturi = "http://restfravaerservice.azurewebsites.net/service1.svc/Person/" . $_GET['id'];
 
 $content = file_get_contents($getresturi);
@@ -20,19 +37,19 @@ $content = file_get_contents($getresturi);
 $decodedContent = json_decode($content);
 //print_r($_SERVER['REQUEST_URI']);
 
-include ("menu.php")
+
 
 ?>
 
 
-<table>
+<table class="table-hover">
     <tr>
         <td colspan="2"><h2>Rediger Bruger</h2></td>
     </tr>
     <form method="post">
         <tr>
             <td>Fornavn:</td>
-            <td><input type="text" name="firstname" value="<?php echo $decodedContent->firstname ?>"></td>
+            <td><input type="text" name="firstname" class="form-control" value="<?php echo $decodedContent->firstname ?>"></td>
         </tr>
         <tr>
             <td>Efternavn:</td>
@@ -122,6 +139,7 @@ if(isset($_POST['submit']))
 
     //header("Location: ".$_SERVER['REQUEST_URI']);
 
+}
 }
 ?>
 </body>

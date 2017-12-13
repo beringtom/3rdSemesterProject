@@ -16,7 +16,9 @@ require ("Funktion/hentHoldFunktion.php")
 </head>
 <body>
 <?php include ("menu.php") ?>
-<table>
+
+
+<table class="table-hover">
     <tr>
         <td colspan="2"><h2>Opret Bruger</h2></td>
     </tr>
@@ -61,15 +63,15 @@ require ("Funktion/hentHoldFunktion.php")
             <td>Rolle:</td>
             <td><select name="rolle">
                     <option value="0">-- None --</option>
-                    <option value="1">Studerende</option>
+                    <option value="3">Studerende</option>
                     <option value="2">Underviser</option>
-                    <option value="3">Uddannelses Leder</option>
+                    <option value="1">Uddannelses Leder</option>
                 </select>
             </td>
         </tr>
         <tr>
             <td></td>
-            <td><input type="submit" value="Submit" name="submit" style="float:right;"></td>
+            <td><input type="submit" value="Opret" name="submit" style="float:right;"></td>
         </tr>
     </form>
 </table>
