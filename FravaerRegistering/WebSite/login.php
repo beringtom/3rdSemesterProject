@@ -34,7 +34,7 @@ if (session_status() == PHP_SESSION_NONE) {
                         </tr>
                         <tr>
                             <td></td>
-                            <td style="float:right;"><input class="btn btn-default float-right" type="submit" value="Submit" name="login"></td>
+                            <td style="float:right;"><input class="btn btn-default float-right" type="submit" value="Login" name="login"></td>
                         </tr>
                         <?php
                     }
