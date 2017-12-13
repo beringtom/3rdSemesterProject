@@ -26,7 +26,7 @@ if (session_status() == PHP_SESSION_NONE) {
   }
 
   
-  $redirectUri = 'http://localhost/FravaerRegistering/WebSite/KalenderAPI/authorize.php';
+  $redirectUri = 'http://localhost/WebSite/KalenderAPI/authorize.php';
 ?>
 <html>
   <head>
