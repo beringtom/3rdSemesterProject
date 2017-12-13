@@ -157,7 +157,8 @@ if(isset($_GET['rperson']))
                     'Content-Length: ' . strlen($json_string))
             );
             $jsondata = curl_exec($ch);
-            header("Location: fravaer.php?rperson=".$_GET['rperson']);
+            sleep(2);
+            //header("Location: fravaer.php?rperson=".$_GET['rperson']);
         }
     }
     else{
