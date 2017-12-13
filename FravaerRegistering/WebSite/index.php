@@ -17,4 +17,6 @@
 <body>
 <?php include("menu.php") ?>
 </body>
+<h1 class="text-center">Welcommen til Fravær registerings system</h1>
+<h2 class="text-center">Du skal logge ind for at bruge systemet</h2>
 </html>

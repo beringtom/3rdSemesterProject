@@ -59,17 +59,19 @@
       return self::makeApiCall($access_token, $user_email, "GET", $getContactsUrl);
     }
 
-   /* public static function SendMail($access_token, $user_email)
+    public function SendMail($access_token, $user_email)
     {
 
-       $data = array("Subject"=> "Ikke mødt op til time",
-        "Body"=>"Content" => "Du har ikke var til time i dag.".date("d-m-Y")."snak med din underviser",
-        "ToRecipients"=>"Address" => "jesper.bay@live.dk");
-    $json_string = json_encode($data);
-echo $json_string;
-      
+      $body = array("ContentType" => "HTML", "Content" => "Du har ikke var til time i dag.".date("d-m-Y")."snak med din underviser");
+      $ToRecipients = array("EmailAddress", array("Address" => "jesper.bay@live.dk"));
 
-$uri = self::$outlookApiUrl."/Me/sendmail";
+       $data = array("Subject"=> "Ikke m&oslash;dt op til time",
+        "Body"=>$body,
+        "ToRecipients"=>$ToRecipients);
+    $json_string = json_encode($data);
+print_r($json_string);      
+
+$uri = self::$outlookApiUrl."/Me//MailFolders/inbox/messages";
 
    $ch = curl_init($uri);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -81,10 +83,11 @@ $uri = self::$outlookApiUrl."/Me/sendmail";
     );
     $jsondata = curl_exec($ch);
 
-       
-        echo $uri;               
+       print_r($ch);
+             
+
       return self::makeApiCall($access_token, $user_email, "POST", $uri);
-    }*/
+    }
     
     public static function makeApiCall($access_token, $user_email, $method, $url, $payload = NULL) {
       // Generate the list of headers to always send.

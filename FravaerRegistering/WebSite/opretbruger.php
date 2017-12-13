@@ -16,7 +16,9 @@ require ("Funktion/hentHoldFunktion.php")
 </head>
 <body>
 <?php include ("menu.php") ?>
-<table>
+
+
+<table class="table-hover">
     <tr>
         <td colspan="2"><h2>Opret Bruger</h2></td>
     </tr>
@@ -69,7 +71,7 @@ require ("Funktion/hentHoldFunktion.php")
         </tr>
         <tr>
             <td></td>
-            <td><input type="submit" value="Submit" name="submit" style="float:right;"></td>
+            <td><input type="submit" value="Opret" name="submit" style="float:right;"></td>
         </tr>
     </form>
 </table>

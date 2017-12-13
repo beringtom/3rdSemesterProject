@@ -1,20 +1,31 @@
 <style type="text/css" media="screen">
-  table, th, td {
+  #table, #th, #td {
    border: 1px solid black;
 }
-table {
+#table {
     width: 100%;
 }
 
-th {
+#th {
     height: 50px;
 }
 </style>
 <?php
-  session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
   require('KalenderAPI/oauth.php');
   require('KalenderAPI/outlook.php');
-  $loggedIn = !is_null($_SESSION['access_token']);
+  if(isset($_SESSION['access_token']))
+  {
+    $loggedIn = !is_null($_SESSION['access_token']);
+  }
+  else
+  {
+    $loggedIn = null;
+  }
+
+  
   $redirectUri = 'http://localhost/FravaerRegistering/WebSite/KalenderAPI/authorize.php';
 ?>
 <html>
@@ -36,7 +47,7 @@ th {
       <!-- User is logged in, do something here -->
       <h2>Your events</h2>
       
-      <table>
+      <table  class="table table-bordered"">
         <tr>
           <th>Subject</th>
           <th>Start</th>
