@@ -84,7 +84,7 @@ if (session_status() == PHP_SESSION_NONE) {
         $jsondata = curl_exec($ch);
         $loginUser = json_decode($jsondata, true);
 
-        print_r($loginUser);
+        //print_r($loginUser);
         if($loginUser["Login_Id"] != 0)
         {
             if(!isset($_SESSION["UserLoggedInID"]))
@@ -103,7 +103,7 @@ if (session_status() == PHP_SESSION_NONE) {
     }
     if(isset($_POST['logud']))
     {
-        print_r($_SESSION);
+        //print_r($_SESSION);
         unset($_SESSION["UserLoggedInID"]);
         unset($_SESSION["UserLoggedInRole"]);
 
